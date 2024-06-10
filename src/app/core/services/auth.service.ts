@@ -8,7 +8,7 @@ export interface LoginData{
 }
 
 export interface RegisterData{
-  username:string
+  name:string
   email:string,
   password:string,
   confirmPassword:string
@@ -34,7 +34,12 @@ export class AuthService {
 
   async register(data:RegisterData){
     try {
-      let res = await axios.post(`${environment.api_url}/users`, data);
+      let res = await axios.post(`${environment.api_url}/users`, data, {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        withCredentials: true
+      });
       console.log('REGISTERED',res)
     } catch (error) {
       return false;

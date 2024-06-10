@@ -20,7 +20,7 @@ export class RegisterComponent {
   hide = true;
   data:RegisterData = {
     email:'',
-    username:'',
+    name:'',
     password:'',
     confirmPassword: ''
   }
