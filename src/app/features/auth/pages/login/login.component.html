@@ -1,24 +1,49 @@
-<div class="grid grid-cols-2 ">
-    <div class="p-5 border-r">
-        <h1 class="text-3xl">Login</h1>
+
+<div class="min-h-screen grid md:grid-cols-2 content-center">
+    <div>
     </div>
 
-    <div class="p-5">
-        <div class="mb-3">
-            <mat-form-field appearance="outline" class="w-full">
-                <mat-label>Email</mat-label>
-                <input type="email" matInput placeholder="Type your email">
-                <mat-icon matSuffix>email</mat-icon>
-                <mat-hint>{{'ex: john@email.com'}}</mat-hint>
-            </mat-form-field>
-        </div>
 
-        <div class="mb-3">
-            <mat-form-field appearance="outline" class="w-full">
-                <mat-label>Password</mat-label>
-                <input type="password" matInput placeholder="Password">
-                <mat-icon matSuffix>password</mat-icon>
-            </mat-form-field>
+    <form action="">
+        <div class="p-8 rounded-l-lg min-h-[75vh] flex flex-col justify-between shadow-[-16px_0px_32px_8px_#edf2f7]">
+            <div>
+                <div class="mb-8">
+                    <h1 class="text-3xl font-bold mb-3">Welcome Back!</h1>
+                    <p class="opacity-80">Please sign-in into your account to gain access to Warung Pos App</p>
+                </div>
+
+                <div>
+                    <div class="mb-3">
+                        <mat-form-field appearance="outline" class="w-full">
+                            <mat-label>Email</mat-label>
+                            <input name="email" required type="email" matInput [(ngModel)]="data.email" placeholder="Type your email">
+                            <mat-icon matSuffix>email</mat-icon>
+                            <mat-hint>{{'ex: john@email.com'}}</mat-hint>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="mb-3">
+                        <mat-form-field appearance="outline" class="w-full">
+                            <mat-label>Password</mat-label>
+                            <input name="password" required [type]="hide ? 'password' : 'text'" matInput [(ngModel)]="data.password" placeholder="Password">
+                            <span class="pr-4" matSuffix (click)="setPasswordVisibility($event)" [attr.aria-label]="'Hide password'"
+                                [attr.aria-pressed]="hide">
+                                <mat-icon class="text-text-secondary hover:text-text-primary">{{hide ? 'visibility_off' :
+                                    'visibility'}}</mat-icon>
+                            </span>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <p class="mb-3">
+                    <button (click)="login($event)" class="w-full py-3 border rounded hover:bg-slate-100 duration-300 transition font-medium">Login</button>
+                </p>
+                <p class="text-center">
+                    <a [routerLink]="['/register']" class="text-slate-400 hover:text-slate-800 duration-300 transition font-medium cursor-pointer">Don't have an account? Please sign up here</a>
+                </p>
+            </div>
         </div>
-    </div>
+    </form>
 </div>
