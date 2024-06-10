@@ -34,12 +34,7 @@ export class AuthService {
 
   async register(data:RegisterData){
     try {
-      let res = await axios.post(`${environment.api_url}/users`, data, {
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        withCredentials: true
-      });
+      let res = await axios.post(`${environment.api_url}/users`, data);
       console.log('REGISTERED',res)
     } catch (error) {
       return false;
