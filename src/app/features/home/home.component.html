@@ -1,3 +1,61 @@
 <app-primary-layout>
+    <div class="w-full md:flex grow">
+        <div #productList class="w-full p-5">
+            <div>
+                <mat-form-field appearance="outline" class="w-full">
+                    <mat-label>Search product</mat-label>
+                    <input name="search" required  matInput placeholder="Type a product name">
+                    <mat-icon matSuffix>search</mat-icon>
+                </mat-form-field>
+            </div>
+        </div>
 
+        <div #currentOrder class="w-full h-full p-3">
+            <div class="h-full flex flex-col p-5 rounded-lg shadow-[-16px_0px_32px_8px_#edf2f7]">
+                <h3 class="mb-3 text-xl font-bold">Current Order</h3>
+                <div class="w-full mb-5 grow border rounded">
+
+                </div>
+
+                <div>
+                    <table class="mb-3 w-full table-auto">
+                        <tr class="text-sm">
+                            <td class="py-1">SubTotal</td>
+                            <td class=" text-end">200</td>
+                        </tr>
+                        <tr class="text-sm">
+                            <td class="py-1">Sales Discount</td>
+                            <td class=" text-end">200</td>
+                        </tr>
+                        <tr class="text-sm">
+                            <td class="py-1">Net Subtotal</td>
+                            <td class=" text-end">200</td>
+                        </tr>
+                        <tr class="text-sm">
+                            <td class="py-1">Total Taxes and fees</td>
+                            <td class=" text-end">200</td>
+                        </tr>
+                        <tr class="border-t border-dashed font-bold">
+                            <td class="py-3">Total</td>
+                            <td class=" text-end">200</td>
+                        </tr>
+                    </table>
+                </div>
+
+
+                <div>
+                    <button class="w-full py-3 border rounded hover:bg-slate-100 duration-150 transition">
+                        <div class="flex gap-3 justify-center items-center font-bold">
+                            <mat-icon class="scale-90">
+                                payments
+                            </mat-icon>
+                            <p>
+                                Pay
+                            </p>
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 </app-primary-layout>
