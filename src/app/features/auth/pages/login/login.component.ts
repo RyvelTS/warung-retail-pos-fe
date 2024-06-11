@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import {RouterModule} from '@angular/router';
+import {Router, RouterModule} from '@angular/router';
 import { environment } from '../../../../../environments/environment';
 import { AuthService, LoginData } from '../../../../core/services/auth.service';
 import { AngularFormsModule } from '../../../../shared/modules/angular-forms/angular-forms.module';
@@ -27,7 +27,8 @@ export class LoginComponent {
   hide = true;
 
   constructor(
-    private authService:AuthService
+    private authService:AuthService,
+    private router:Router
   ){
   }
     setPasswordVisibility(event: Event) {
@@ -35,8 +36,9 @@ export class LoginComponent {
       this.hide = !this.hide;
     }
 
-    login(event: Event){
+    async login(event: Event){
       event.preventDefault();
-      this.authService.login(this.data)
+      await this.authService.login(this.data);
+      this.router.navigate(['/']);
     }
 }

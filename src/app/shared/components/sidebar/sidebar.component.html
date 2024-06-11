@@ -1,0 +1,25 @@
+<div class="h-full min-w-64 p-3 flex flex-col justify-between shadow-[12px_0px_24px_4px_#edf2f7]">
+    <div>
+        <div class="mb-8 flex gap-3 p-3 items-center">
+            <div class="h-12 aspect-square border ">
+
+            </div>
+            <h1 class="font-medium text-xl">Warung POS</h1>
+        </div>
+
+        <div>
+            <a *ngFor="let link of navLinks" [routerLink]="link.link" routerLinkActive="font-bold" router
+                class="px-4 py-3 flex gap-2 items-center border-b rounded hover:bg-slate-100 duration-300 transition opacity-80 hover:opacity-100 active:scale-90">
+                <mat-icon class="scale-75">
+                    {{link.icon}}
+                </mat-icon>
+
+                <p class="capitalize">{{link.name}}</p>
+            </a>
+        </div>
+    </div>
+
+    <div class="border-t pt-3">
+        <button (click)="logout($event)" class="w-full py-3 border rounded hover:bg-slate-100 duration-300 transition font-medium">Logout</button>
+    </div>
+</div>
