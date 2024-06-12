@@ -1,26 +1,26 @@
 <app-primary-layout>
     <div class="w-full p-5">
         <div class="p-5">
-            <div class="mb-10 w-full lg:text-center flex items-center">
-                <div class="w-1/5">
+            <div class="mb-10 w-full lg:text-center flex gap-5 items-center">
+                <div class="w-1/5 hidden lg:block">
                     <hr>
                 </div>
 
-                <div class="w-3/5">
-                    <h2 class="text-3xl font-bold">Role Management</h2>
+                <div class="lg:w-3/5">
+                    <h2 class="text-3xl font-bold whitespace-nowrap">Role Management</h2>
                     <p class="mb-2 text-base font-semibold leading-7 opacity-50">
                         Streamline the assignment of user
                         roles and permissions
                     </p>
                 </div>
 
-                <div class="w-1/5">
+                <div class="w-full lg:w-1/5">
                     <hr>
                 </div>
             </div>
 
             <div class="mb-5 w-full flex justify-center">
-                <div class="w-full flex">
+                <div class="w-full flex justify-center">
                     <div class="py-3 border-r rounded-l-lg shadow-[20px_0px_16px_4px_#edf2f7]">
                         <div class="border-b px-5 h-20 items-center">
                             <p class="flex gap-1 items-center">
@@ -57,7 +57,7 @@
                         </div>
                     </div>
 
-                    <div class="w-full max-w-[700px] flex overflow-x-auto" cdkDropList
+                    <div class="max-w-[20vw] lg:max-w-[26vw] xl:max-w-[40vw] flex overflow-x-auto" cdkDropList
                         cdkDropListOrientation="horizontal" (cdkDropListDropped)="drop($event)">
                         <div *ngFor="let role of roles" cdkDrag
                             class="w-full py-3 border-r backdrop-blur-sm bg-white/30 cursor-grab">
