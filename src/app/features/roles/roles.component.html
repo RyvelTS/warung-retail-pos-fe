@@ -1,15 +1,21 @@
 <app-primary-layout>
     <div class="w-full p-5">
         <div class="p-5">
-            <div class="mb-5 w-full flex gap-12 items-center">
-                <h3 class="-mt-5 font-medium text-lg whitespace-nowrap">Manage Roles</h3>
-                <div class="w-full">
-                    <mat-form-field appearance="outline" class="w-full">
-                        <mat-label>Search Roles</mat-label>
-                        <input name="search-role" required matInput placeholder="Type a role name"
-                            (keyup)="searchRole($event)">
-                        <mat-icon matSuffix>search</mat-icon>
-                    </mat-form-field>
+            <div class="mb-10 w-full lg:text-center flex items-center">
+                <div class="w-1/5">
+                    <hr>
+                </div>
+
+                <div class="w-3/5">
+                    <h2 class="text-3xl font-bold">Role Management</h2>
+                    <p class="mb-2 text-base font-semibold leading-7 opacity-50">
+                        Streamline the assignment of user
+                        roles and permissions
+                    </p>
+                </div>
+
+                <div class="w-1/5">
+                    <hr>
                 </div>
             </div>
 
