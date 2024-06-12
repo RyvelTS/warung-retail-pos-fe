@@ -19,11 +19,7 @@ export class RolesComponent {
   modulePermissions = [
     {
       module: 'transactions',
-      permissions: [
-        'create',
-        'edit',
-        'delete'
-      ]
+      permissions: []
     },
     {
       module: 'reports',
