@@ -1,0 +1,145 @@
+<app-primary-layout>
+    <div class="w-full p-5">
+        <div class="p-5">
+            <div class="mb-5 w-full flex gap-12 items-center">
+                <h3 class="-mt-5 font-medium text-lg whitespace-nowrap">Manage Roles</h3>
+                <div class="w-full">
+                    <mat-form-field appearance="outline" class="w-full">
+                        <mat-label>Search Roles</mat-label>
+                        <input name="search-role" required matInput placeholder="Type a role name"
+                            (keyup)="searchRole($event)">
+                        <mat-icon matSuffix>search</mat-icon>
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div class="mb-5 w-full flex justify-center">
+                <div class="w-full flex">
+                    <div class="py-3 border-r">
+                        <div class="border-b px-5 h-20 items-center">
+                            <p class="flex gap-1 items-center">
+                                <span>
+                                    <input name="search-role" required placeholder="Search Role ..."
+                                        (keyup)="searchRole($event)" class="px-2 py-1 outline-slate-200">
+                                </span>
+                                <mat-icon>
+                                    arrow_right
+                                </mat-icon>
+                            </p>
+                            <hr class="my-1 border-dashed">
+                            <p class="flex gap-1 items-center">
+                                <span>
+                                    <input name="search-permission" required placeholder="Search Module ..."
+                                        [(ngModel)]="search.permission" class="px-2 py-1 outline-slate-200">
+                                </span>
+                                <mat-icon>
+                                    arrow_drop_down
+                                </mat-icon>
+                            </p>
+                        </div>
+
+                        <hr class="my-[0.5px] border-2">
+                        <div *ngFor="let modulePermission of filteredModulePermissions">
+                            <div class="h-12 px-3 flex items-center border-b">
+                                <p id="permission-{{modulePermission.module}}"
+                                    class="capitalize font-bold whitespace-nowrap">{{modulePermission.module}}</p>
+                            </div>
+                            <div *ngFor="let permission of modulePermission.permissions"
+                                class="h-12 px-5 flex items-center border-b capitalize">
+                                <p>{{permission}}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="w-full max-w-[700px] flex overflow-x-auto" cdkDropList
+                        cdkDropListOrientation="horizontal" (cdkDropListDropped)="drop($event)">
+                        <div *ngFor="let role of roles" cdkDrag
+                            class="w-full py-3 border-r backdrop-blur-sm bg-white/30 cursor-grab">
+                            <div id="role-{{role.id}}"
+                                class="min-w-32 border-b px-5 relative flex flex-col h-20 items-center justify-center">
+                                <div class="py-2">
+                                    <input type="text"
+                                        class="py-2 text-center outline-transparent focus:border-b-2 bg-transparent"
+                                        [(ngModel)]="role.name" placeholder="Untitled Role">
+                                </div>
+                                <div class="absolute scale-90 -top-3 right-0">
+                                    <button (click)="deleteRole(role)" mat-icon-button color="warn"
+                                        aria-label="Delete Role">
+                                        <mat-icon>clear</mat-icon>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <hr class="my-[0.5px] border-2">
+                            <div *ngFor="let modulePermission of filteredModulePermissions">
+                                <div (click)="addOrRemoveModule(role, modulePermission.module)"
+                                    class="h-12 px-3 flex items-center justify-center border-b cursor-pointer">
+                                    <mat-icon
+                                        *ngIf="checkRoleModule(role, modulePermission.module); else moduleNotAllowed">
+                                        radio_button_checked
+                                    </mat-icon>
+
+                                    <ng-template #moduleNotAllowed>
+                                        <mat-icon class=" opacity-10">
+                                            radio_button_unchecked
+                                        </mat-icon>
+                                    </ng-template>
+                                </div>
+
+                                <div *ngFor="let permission of modulePermission.permissions"
+                                    class="h-12 px-5 flex items-center justify-center border-b">
+
+                                    <ng-container
+                                        *ngIf="checkRoleModule(role, modulePermission.module); else modulePermissionNotAllowed">
+                                        <div class="flex items-center justify-center cursor-pointer"
+                                            (click)="addOrRemoveModulePermission(role,modulePermission.module, permission)">
+                                            <mat-icon
+                                                *ngIf="checkRoleModulePermission(role, modulePermission.module, permission); else permissionNotAllowed">
+                                                radio_button_checked
+                                            </mat-icon>
+
+                                            <ng-template #permissionNotAllowed>
+                                                <mat-icon class=" opacity-10">
+                                                    radio_button_unchecked
+                                                </mat-icon>
+                                            </ng-template>
+                                        </div>
+                                    </ng-container>
+
+                                    <ng-template #modulePermissionNotAllowed>
+                                    </ng-template>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="py-3 border-l">
+                        <p class="border-b px-5 flex h-20 items-center capitalize">
+                            <button (click)="addRole()" class="px-6 py-2 gap-1 flex items-center border rounded hover:bg-slate-100 duration-150 transition active:scale-90
+                                    whitespace-nowrap">
+                                <mat-icon class=" scale-75">
+                                    add_box
+                                </mat-icon>
+                                <p class="font-bold">Add Role</p>
+                            </button>
+                        </p>
+                        <hr class="my-[0.5px] border-2">
+                        <div *ngFor="let modulePermission of filteredModulePermissions" class="w-1/2">
+                            <div class="h-12 px-3 flex items-center justify-center border-b">
+                            </div>
+                            <div *ngFor="let permission of modulePermission.permissions"
+                                class="h-12 px-5 flex items-center justify-center border-b">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="w-full">
+                <button class="w-full py-3 border rounded hover:bg-slate-100 duration-300 transition font-medium">
+                    Save
+                </button>
+            </div>
+        </div>
+    </div>
+</app-primary-layout>

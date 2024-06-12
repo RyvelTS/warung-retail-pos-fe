@@ -8,7 +8,7 @@
         </div>
 
         <div>
-            <a *ngFor="let link of navLinks" [routerLink]="link.link" routerLinkActive="font-bold" router
+            <a *ngFor="let link of navLinks" [routerLink]="'/' + link.link" routerLinkActive="font-bold border-r border-r-8" [routerLinkActiveOptions]="{exact: true}"
                 class="px-4 py-3 flex gap-2 items-center border-b rounded hover:bg-slate-100 duration-300 transition opacity-80 hover:opacity-100 active:scale-90">
                 <mat-icon class="scale-75">
                     {{link.icon}}
