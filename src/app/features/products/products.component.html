@@ -1,0 +1,36 @@
+<app-primary-layout>
+  <div class="p-8">
+    <h1 class="text-2xl font-bold mb-4">Product Management</h1>
+    <div class="overflow-x-auto">
+      <table
+        *ngIf="products.length > 0; else noProducts"
+        class="w-full mt-8 border-collapse bg-white shadow-md rounded-lg"
+      >
+        <thead>
+          <tr class="border-b">
+            <th class="p-3 text-left">Name</th>
+            <th class="p-3 text-left">Description</th>
+            <th class="p-3">Price</th>
+            <th class="p-3">Quantity</th>
+            <th class="p-3">SKU</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let product of products"
+            class="border-b hover:bg-gray-100"
+          >
+            <td class="p-3">{{ product.name }}</td>
+            <td class="p-3">{{ product.description }}</td>
+            <td class="p-3">{{ product.price }}</td>
+            <td class="p-3">{{ product.productQuantity }}</td>
+            <td class="p-3">{{ product.sku }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <ng-template #noProducts>
+        <p class="text-center text-gray-500 mt-4">No products available.</p>
+      </ng-template>
+    </div>
+  </div>
+</app-primary-layout>
