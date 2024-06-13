@@ -75,4 +75,13 @@ export class ProductsComponent implements OnInit {
       console.error('Error creating products:', error);
     }
   }
+
+  async deleteProduct(productId: string) {
+    try {
+      await axiosInstance.delete(`/products/${productId}`);
+      this.getProducts();
+    } catch (error) {
+      console.error('Error deleting product:', error);
+    }
+  }
 }

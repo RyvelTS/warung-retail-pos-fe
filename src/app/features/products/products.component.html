@@ -98,6 +98,7 @@
             <th class="p-3">Price</th>
             <th class="p-3">Quantity</th>
             <th class="p-3">SKU</th>
+            <th class="p-3">Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -110,6 +111,15 @@
             <td class="p-3">{{ product.price }}</td>
             <td class="p-3">{{ product.productQuantity }}</td>
             <td class="p-3">{{ product.sku }}</td>
+            <td class="p-3">
+              <button
+                type="button"
+                class="bg-red-600 hover:bg-red-500 text-white font-bold py-1 px-2 rounded"
+                (click)="deleteProduct(product.id)"
+              >
+                Delete
+              </button>
+            </td>
           </tr>
         </tbody>
       </table>
