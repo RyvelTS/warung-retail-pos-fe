@@ -18,9 +18,10 @@ export class ProductsComponent implements OnInit {
   newProduct: any = {
     name: '',
     description: '',
-    price: null,
-    productQuantity: null,
+    price: 0,
+    productQuantity: 0,
     sku: '',
+    isActive: true,
   };
   products: any = [];
   hasProducts: boolean = false;
@@ -38,8 +39,8 @@ export class ProductsComponent implements OnInit {
     this.newProduct = {
       name: '',
       description: '',
-      price: null,
-      productQuantity: null,
+      price: 0,
+      productQuantity: 0,
       sku: '',
     };
   }
@@ -114,10 +115,9 @@ export class ProductsComponent implements OnInit {
     this.newProduct = {
       name: '',
       description: '',
-      price: null,
-      productQuantity: null,
+      price: 0,
+      productQuantity: 0,
       sku: '',
-      isActive: false,
     };
   }
 
