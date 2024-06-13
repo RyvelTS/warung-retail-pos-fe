@@ -13,6 +13,7 @@ import { FormsModule } from '@angular/forms';
 })
 export class ProductsComponent implements OnInit {
   products: any = [];
+  hasProducts: boolean = false;
 
   ngOnInit() {
     this.getProducts();
@@ -22,6 +23,7 @@ export class ProductsComponent implements OnInit {
     try {
       let res = await axiosInstance.get('/products');
       this.products = res.data;
+      this.hasProducts = this.products.length > 0;
     } catch (error) {
       console.log(error);
     }
