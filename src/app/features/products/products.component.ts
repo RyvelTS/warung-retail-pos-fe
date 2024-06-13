@@ -13,6 +13,8 @@ import { FormsModule } from '@angular/forms';
 })
 export class ProductsComponent implements OnInit {
   isModalOpen: boolean = false;
+  selectedProductId: number = 0;
+  isUpdateModalOpen: boolean = false;
   newProduct: any = {
     name: '',
     description: '',
@@ -74,6 +76,49 @@ export class ProductsComponent implements OnInit {
     } catch (error: unknown) {
       console.error('Error creating products:', error);
     }
+  }
+
+  async updateProduct() {
+    try {
+      const { name, description, price, productQuantity, sku, isActive } =
+        this.newProduct;
+      if (!name || !price || !productQuantity || !sku) {
+        throw new Error('Please fill in all required fields');
+      }
+
+      const payload = {
+        name,
+        description: description || '',
+        price,
+        productQuantity,
+        sku,
+        isActive,
+      };
+
+      await axiosInstance.patch(`/products/${this.selectedProductId}`, payload);
+      this.closeUpdateModal();
+      this.getProducts();
+    } catch (error) {
+      console.error('Error updating product:', error);
+    }
+  }
+
+  openUpdateModal(product: any) {
+    this.selectedProductId = product.id;
+    this.newProduct = { ...product };
+    this.isUpdateModalOpen = true;
+  }
+
+  closeUpdateModal() {
+    this.isUpdateModalOpen = false;
+    this.newProduct = {
+      name: '',
+      description: '',
+      price: null,
+      productQuantity: null,
+      sku: '',
+      isActive: false,
+    };
   }
 
   async deleteProduct(productId: string) {
