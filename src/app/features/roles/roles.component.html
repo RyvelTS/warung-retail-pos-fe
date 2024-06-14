@@ -24,22 +24,24 @@
                     <div class="py-3 border-r rounded-l-lg shadow-[20px_0px_16px_4px_#edf2f7]">
                         <div class="border-b px-5 h-20 items-center">
                             <p class="flex gap-1 items-center">
+                                <mat-icon class="scale-70 opacity-30  cursor-grab scale-90">key</mat-icon>
                                 <span>
                                     <input name="search-role" required placeholder="Search Role ..."
                                         (keyup)="searchRole($event)" class="px-2 py-1 outline-slate-200">
                                 </span>
-                                <mat-icon>
-                                    arrow_right
+                                <mat-icon class="scale-90">
+                                    swap_horiz
                                 </mat-icon>
                             </p>
                             <hr class="my-1 border-dashed">
                             <p class="flex gap-1 items-center">
+                                <mat-icon class="scale-70 opacity-30  cursor-grab scale-90">search</mat-icon>
                                 <span>
                                     <input name="search-permission" required placeholder="Search Module ..."
                                         [(ngModel)]="search.permission" class="px-2 py-1 outline-slate-200">
                                 </span>
-                                <mat-icon>
-                                    arrow_drop_down
+                                <mat-icon class="scale-90">
+                                    import_export
                                 </mat-icon>
                             </p>
                         </div>
@@ -57,22 +59,39 @@
                         </div>
                     </div>
 
-                    <div class="max-w-[20vw] lg:max-w-[26vw] xl:max-w-[40vw] flex overflow-x-auto" cdkDropList
-                        cdkDropListOrientation="horizontal" (cdkDropListDropped)="drop($event)">
+                    <div class="max-w-[20vw] lg:max-w-[20vw] xl:max-w-[32vw] 2xl:max-w-[40vw] flex overflow-x-auto"
+                        cdkDropList cdkDropListOrientation="horizontal" (cdkDropListDropped)="drop($event)">
                         <div *ngFor="let role of roles" cdkDrag
-                            class="w-full py-3 border-r backdrop-blur-sm bg-white/30 cursor-grab">
+                            class="w-full py-3 border-r backdrop-blur-sm bg-white/30">
                             <div id="role-{{role.id}}"
                                 class="min-w-32 border-b px-5 relative flex flex-col h-20 items-center justify-center">
                                 <div class="py-2">
-                                    <input type="text"
-                                        class="py-2 text-center outline-transparent focus:border-b-2 bg-transparent"
-                                        [(ngModel)]="role.name" placeholder="Untitled Role">
+                                    <div>
+                                        <input type="text"
+                                            class="py-2 text-center font-bold outline-transparent bg-transparent capitalize"
+                                            [(ngModel)]="role.name" placeholder="Untitled Role">
+                                    </div>
                                 </div>
-                                <div class="absolute scale-90 -top-3 right-0">
+                                <div class="absolute w-full flex justify-between items-center scale-90 -top-3">
+                                    <div class="flex justify-center items-center">
+                                        <div class="flex justify-center items-center" cdkDragHandle>
+                                            <mat-icon
+                                                class="scale-70 opacity-30  cursor-grab scale-90">drag_handle</mat-icon>
+                                        </div>
+                                    </div>
                                     <button (click)="deleteRole(role)" mat-icon-button color="warn"
-                                        aria-label="Delete Role">
+                                        aria-label="Delete Role" class="scale-70">
                                         <mat-icon>clear</mat-icon>
                                     </button>
+                                </div>
+
+                                <div class="absolute w-full flex justify-center scale-90 bottom-1">
+                                    <div class="flex justify-center items-center">
+                                        <div class="flex gap-1 justify-center items-center opacity-50">
+                                            <mat-icon class="scale-70 cursor-grab scale-90">history</mat-icon>
+                                            <p class="text-sm font-medium ">14/06/23 19:00</p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
