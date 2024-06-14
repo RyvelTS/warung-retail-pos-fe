@@ -2,12 +2,12 @@ import { Component } from '@angular/core';
 import { PrimaryLayoutComponent } from '../../shared/layouts/primary-layout/primary-layout.component';
 import { CommonModule } from '@angular/common';
 import { AngularMaterialModule } from '../../shared/modules/angular-material/angular-material.module';
-import { CdkDragDrop, CdkDrag, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, CdkDrag, CdkDropList, moveItemInArray, CdkDragHandle } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-roles',
   standalone: true,
-  imports: [PrimaryLayoutComponent, CommonModule, AngularMaterialModule, CdkDropList, CdkDrag],
+  imports: [PrimaryLayoutComponent, CommonModule, AngularMaterialModule, CdkDropList, CdkDrag, CdkDragHandle],
   templateUrl: './roles.component.html',
   styleUrl: './roles.component.scss'
 })
