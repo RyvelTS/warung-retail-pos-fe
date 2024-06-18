@@ -3,147 +3,69 @@ import { PrimaryLayoutComponent } from '../../shared/layouts/primary-layout/prim
 import { CommonModule } from '@angular/common';
 import { AngularMaterialModule } from '../../shared/modules/angular-material/angular-material.module';
 import { CdkDragDrop, CdkDrag, CdkDropList, moveItemInArray, CdkDragHandle } from '@angular/cdk/drag-drop';
+import axiosInstance from '../../core/instances/axios-config';
+import { RbacService } from '../../core/services/rbac.service';
+import { PermissionsDirective } from '../../core/directives/permissions.directive';
+import { RoleService } from './services/role.service';
+import { Role } from '../../core/models/role';
+import { Permission } from '../../core/models/permission';
 
 @Component({
   selector: 'app-roles',
   standalone: true,
-  imports: [PrimaryLayoutComponent, CommonModule, AngularMaterialModule, CdkDropList, CdkDrag, CdkDragHandle],
+  imports: [PrimaryLayoutComponent, CommonModule, AngularMaterialModule, CdkDropList, CdkDrag, CdkDragHandle, PermissionsDirective],
   templateUrl: './roles.component.html',
   styleUrl: './roles.component.scss'
 })
 export class RolesComponent {
+  constructor(
+    private rbacService: RbacService,
+    private roleService: RoleService
+  ) {
+
+  }
+
   search = {
     permission: ''
   }
 
   modulePermissions = [
     {
-      module: 'transactions',
-      permissions: []
+      resource: 'transactions',
+      actions: []
     },
     {
-      module: 'reports',
-      permissions: []
+      resource: 'reports',
+      actions: []
     },
     {
-      module: 'products',
-      permissions: [
+      resource: 'products',
+      actions: [
         'create',
-        'edit',
+        'update',
         'delete'
       ]
     },
     {
-      module: 'roles',
-      permissions: [
+      resource: 'roles',
+      actions: [
         'create',
-        'edit',
+        'update',
         'delete'
       ]
     },
     {
-      module: 'users',
-      permissions: [
+      resource: 'users',
+      actions: [
         'create',
-        'edit',
+        'update',
         'delete'
       ]
     }
   ];
 
   roleCounter = 4;
-  roles: any = [
-    {
-      id: 1,
-      name: 'super admin',
-      permissions: [
-        {
-          module: 'transactions',
-          permissions: []
-        },
-        {
-          module: 'reports',
-          permissions: []
-        },
-        {
-          module: 'products',
-          permissions: [
-            'create',
-            'edit',
-            'delete'
-          ]
-        },
-        {
-          module: 'roles',
-          permissions: [
-            'create',
-            'edit',
-            'delete'
-          ]
-        },
-        {
-          module: 'users',
-          permissions: [
-            'create',
-            'edit',
-            'delete'
-          ]
-        }
-      ]
-    },
-    {
-      id: 2,
-      name: 'admin',
-      permissions: [
-        {
-          module: 'transactions',
-          permissions: []
-        },
-        {
-          module: 'reports',
-          permissions: []
-        },
-        {
-          module: 'products',
-          permissions: [
-            'create',
-            'edit',
-            'delete'
-          ]
-        }
-      ]
-    },
-    {
-      id: 3,
-      name: 'product manager',
-      permissions: [
-        {
-          module: 'products',
-          permissions: [
-            'create',
-            'edit',
-            'delete'
-          ]
-        }
-      ]
-    },
-
-    {
-      id: 4,
-      name: 'maintainer',
-      permissions: [
-        {
-          module: 'transactions',
-          permissions: []
-        },
-        {
-          module: 'reports',
-          permissions: []
-        },
-      ]
-    }
-
-  ];
+  roles: Role[] = [];
 
   get filteredModulePermissions() {
     if (this.search.permission == '') {
@@ -153,15 +75,24 @@ export class RolesComponent {
     return this.modulePermissions.filter((modulePermission: any) => (modulePermission.module).toLowerCase().includes(this.search.permission.toLowerCase()));
   }
 
+  canDeleteRole(roleId: string): boolean {
+    return this.rbacService.checkPermission(['delete:roles']) || (roleId + '').includes('new');
+  }
+
+  canUpdateRole() {
+    return this.rbacService.checkPermission(['update:roles'])
+  }
+
   async addRole() {
     this.roleCounter++;
+    let newId = this.roleCounter + '-new'
     await this.roles.push({
-      id: this.roleCounter,
+      id: newId,
       name: '',
       permissions: []
     })
 
-    this.scroll(this.roleCounter + '', 'role');
+    this.scroll(newId, 'role');
   }
 
   drop(event: CdkDragDrop<string[]>) {
@@ -183,6 +114,26 @@ export class RolesComponent {
     await this.scroll(role.id, 'role');
   }
 
+  async getRoles() {
+    if (!this.rbacService.checkPermission(['read:roles'])) {
+      console.error('Not Authorized');
+    };
+
+    this.roles = await this.roleService.getRoles();
+  }
+
+  async getPermissions() {
+    if (!this.rbacService.checkPermission(['read:roles'])) {
+      console.error('Not Authorized');
+    };
+
+    this.modulePermissions = await this.rbacService.getPermissions()
+  }
+
+  async save() {
+    await this.roleService.updateRole(this.roles)
+  }
+
   async delay(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
@@ -194,6 +145,7 @@ export class RolesComponent {
     while (element == null && attempt > 0) {
       await this.delay(100);
       element = document.querySelector('#' + object + '-' + id);
+      console.log(element);
       attempt--;
     }
 
@@ -206,49 +158,64 @@ export class RolesComponent {
     }
   }
 
-  checkRoleModule(role: any, module: string) {
-    let moduleAllowed = role.permissions.some((permission: any) => permission.module == module);
-    return moduleAllowed;
+  checkRoleResource(role: any, resource: string) {
+    let resourceAllowed = role.permissions.some((permission: any) => permission.resource == resource);
+    return resourceAllowed;
   }
 
-  checkRoleModulePermission(role: any, module: string, permission: string) {
-    let moduleAllowed = role.permissions.find((permission: any) => permission.module == module);
-    if (moduleAllowed == undefined) {
+  checkRoleResourcePermission(role: any, resource: string, action: string) {
+    let resourceAllowed = role.permissions.find((permission: any) => permission.resource == resource);
+    if (resourceAllowed == undefined) {
       return false
     }
 
-    let permissionAllowed = moduleAllowed.permissions.some((modulePermission: any) => modulePermission == permission);
+    let permissionAllowed = resourceAllowed.actions.some((resourceAction: any) => resourceAction == action);
     return permissionAllowed;
   }
 
-  addOrRemoveModule(role: any, module: string) {
-    if (this.checkRoleModule(role, module)) {
-      role.permissions = role.permissions.filter((permission: any) => permission.module != module);
+  addOrRemoveResource(role: any, resource: string) {
+    if (!this.canUpdateRole()) return;
+
+    if (this.checkRoleResource(role, resource)) {
+      role.permissions = role.permissions.filter((permission: any) => permission.resource != resource);
     } else {
+      let modulePermission = this.modulePermissions.find((permission) => permission.resource == resource)
+      let actions: string[] = []
+      if (modulePermission) {
+        actions = [modulePermission.actions[0]];
+      }
+
       role.permissions.push({
-        module: module,
-        permissions: []
+        resource: resource,
+        actions: actions
       })
     }
   }
 
-  addOrRemoveModulePermission(role: any, module: string, permission: string) {
-    let moduleAllowed = role.permissions.find((permission: any) => permission.module == module);
-    if (moduleAllowed == undefined) {
+  addOrRemoveResourcePermission(role: any, resource: string, action: string) {
+    if (!this.canUpdateRole()) return;
+
+    let resourceAllowed = role.permissions.find((permission: any) => permission.resource == resource);
+    if (resourceAllowed == undefined) {
       return;
     }
 
-    if (moduleAllowed.permissions.includes(permission)) {
-      const index = moduleAllowed.permissions.indexOf(permission, 0);
+    if (resourceAllowed.actions.includes(action)) {
+      const index = resourceAllowed.actions.indexOf(action, 0);
       if (index > -1) {
-        moduleAllowed.permissions.splice(index, 1);
+        resourceAllowed.actions.splice(index, 1);
       }
     } else {
-      moduleAllowed.permissions.push(permission)
+      resourceAllowed.actions.push(action)
     }
   }
 
   deleteRole(deletedRole: any) {
     this.roles = this.roles.filter((role: any) => role.id != deletedRole.id);
+  }
+
+  ngOnInit() {
+    this.getRoles();
+    this.getPermissions()
   }
 }
