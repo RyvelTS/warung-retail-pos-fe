@@ -3,6 +3,7 @@ import { authRoutes } from './features/auth/auth.routes';
 import { homeRoutes } from './features/home/home.routes';
 import { rolesRoutes } from './features/roles/roles.routes';
 import { usersRoutes } from './features/users/users.routes';
+import { productsRoutes } from './features/products/products.routes';
 
 export const routes: Routes = [
     ...authRoutes,
@@ -19,5 +20,8 @@ export const routes: Routes = [
             ...usersRoutes
         ]
     },
-
+    {
+        path: 'products',
+        children: [...productsRoutes],
+    },
 ];
