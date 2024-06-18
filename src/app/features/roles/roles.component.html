@@ -96,20 +96,22 @@
                             </div>
 
                             <hr class="my-[0.5px] border-2">
-                            <div *ngFor="let modulePermission of filteredModulePermissions">
-                                <div (click)="addOrRemoveResource(role, modulePermission.resource)"
-                                    [ngClass]="canUpdateRole() ? 'cursor-pointer' : 'cursor-not-allowed opacity-30'"
-                                    class="h-12 px-3 flex items-center justify-center border-b">
-                                    <mat-icon
-                                        *ngIf="checkRoleResource(role, modulePermission.resource); else moduleNotAllowed">
-                                        radio_button_checked
-                                    </mat-icon>
-
-                                    <ng-template #moduleNotAllowed>
-                                        <mat-icon class=" opacity-10">
-                                            radio_button_unchecked
+                            <div *ngFor="let modulePermission of filteredModulePermissions" class="">
+                                <div class="border-b">
+                                    <div (click)="addOrRemoveResource(role, modulePermission.resource)"
+                                        [ngClass]="canUpdateRole() ? 'cursor-pointer' : 'cursor-not-allowed opacity-30'"
+                                        class="h-12 px-3 flex items-center justify-center">
+                                        <mat-icon
+                                            *ngIf="checkRoleResource(role, modulePermission.resource); else moduleNotAllowed">
+                                            radio_button_checked
                                         </mat-icon>
-                                    </ng-template>
+
+                                        <ng-template #moduleNotAllowed>
+                                            <mat-icon class=" opacity-10">
+                                                radio_button_unchecked
+                                            </mat-icon>
+                                        </ng-template>
+                                    </div>
                                 </div>
 
                                 <div *ngFor="let permission of modulePermission.actions.slice(1)"
