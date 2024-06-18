@@ -1,0 +1,10 @@
+<button
+  [ngClass]="{
+    'bg-slate-700 text-white hover:bg-slate-500': type === 'primary',
+    'border border-slate-700 hover:bg-slate-800 hover:text-white':
+      type === 'secondary'
+  }"
+  class="pt-1 px-1 rounded active:scale-90 duration-150 transition"
+>
+  <ng-content></ng-content>
+</button>
