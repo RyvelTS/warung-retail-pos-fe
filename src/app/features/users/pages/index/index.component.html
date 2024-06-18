@@ -1,0 +1,24 @@
+<app-primary-layout>
+    <div class="w-full p-5">
+        <div class="my-8">
+            <h2 class="text-3xl font-bold whitespace-nowrap">User Management</h2>
+            <p class="mb-2 text-base font-semibold leading-7 opacity-50">
+                Efficiently manage user data
+            </p>
+        </div>
+        <table class="w-full table-auto">
+            <thead class="bg-slate-100">
+                <tr class="font-medium">
+                    <th class="px-3 py-2 text-start">Name</th>
+                    <th class="px-3 py-2 text-start">Email</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let user of users" class="border-b hover:bg-slate-50" (click)="viewUser(user)">
+                    <td class="px-3 py-2">{{user.name}}</td>
+                    <td class="px-3 py-2">{{user.email}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</app-primary-layout>

@@ -13,18 +13,18 @@ import { SidebarComponent } from '../../components/sidebar/sidebar.component';
 })
 export class PrimaryLayoutComponent {
   constructor(
-    private authService:AuthService,
-    private router:Router
-  ){
+    private authService: AuthService,
+    private router: Router
+  ) {
   }
 
-  async logout(event: Event){
+  async logout(event: Event) {
     event.preventDefault();
     await this.authService.logout();
     this.router.navigate(['login']);
   }
 
-  get user(){
-    return this.authService.userData;
+  get user() {
+    return this.authService.user;
   }
 }
