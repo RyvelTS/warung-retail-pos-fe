@@ -43,7 +43,7 @@ export class EditComponent {
   }
 
   async getRoles() {
-    this.roles = await this.roleService.getRoles();
+    this.roles = await this.roleService.index();
   }
 
   async save() {

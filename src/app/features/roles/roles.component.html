@@ -19,6 +19,9 @@
                 </div>
             </div>
 
+            <app-alert *ngIf="show.alert" [config]="alertConfig" class="block mb-3">
+            </app-alert>
+
             <div class="mb-5 w-full flex justify-center">
                 <div class="w-full flex justify-center">
                     <div class="py-3 border-r rounded-l-lg shadow-[20px_0px_16px_4px_#edf2f7]">

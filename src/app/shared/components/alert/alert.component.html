@@ -1,0 +1,27 @@
+<div *ngIf="config.message != ''" class="p-3 flex gap-3 items-center rounded border-2"
+    [ngClass]="{'success' : 'bg-green-500/20 border-green-500/50', 'warning' : 'bg-amber-500/20 border-amber-500/50', 'danger' : 'bg-red-500/20 border-red-500/50', 'info' : 'bg-blue-500/20 border-blue-500/50'}[config.type]">
+    <ng-container [ngSwitch]="config.type">
+        <ng-container *ngSwitchCase="'success'">
+            <mat-icon>
+                check_circle
+            </mat-icon>
+        </ng-container>
+        <ng-container *ngSwitchCase="'warning'">
+            <mat-icon>
+                warning
+            </mat-icon>
+        </ng-container>
+        <ng-container *ngSwitchCase="'danger'">
+            <mat-icon>
+                dangerous
+            </mat-icon>
+        </ng-container>
+        <ng-container *ngSwitchDefault>
+            <mat-icon>
+                info
+            </mat-icon>
+        </ng-container>
+    </ng-container>
+
+    <p class="font-bold">{{config.message}}</p>
+</div>

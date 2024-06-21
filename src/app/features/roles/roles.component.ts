@@ -9,11 +9,12 @@ import { PermissionsDirective } from '../../core/directives/permissions.directiv
 import { RoleService } from './services/role.service';
 import { Role } from '../../core/models/role';
 import { Permission } from '../../core/models/permission';
+import { AlertComponent, AlertConfig } from '../../shared/components/alert/alert.component';
 
 @Component({
   selector: 'app-roles',
   standalone: true,
-  imports: [PrimaryLayoutComponent, CommonModule, AngularMaterialModule, CdkDropList, CdkDrag, CdkDragHandle, PermissionsDirective],
+  imports: [PrimaryLayoutComponent, CommonModule, AngularMaterialModule, CdkDropList, CdkDrag, CdkDragHandle, PermissionsDirective, AlertComponent],
   templateUrl: './roles.component.html',
   styleUrl: './roles.component.scss'
 })
@@ -67,6 +68,17 @@ export class RolesComponent {
   roleCounter = 4;
   roles: Role[] = [];
 
+  alertConfig: AlertConfig = {
+    type: 'info',
+    message: ''
+  }
+
+  show: {
+    alert: boolean
+  } = {
+      alert: false
+    }
+
   get filteredModulePermissions() {
     if (this.search.permission == '') {
       return this.modulePermissions;
@@ -119,7 +131,7 @@ export class RolesComponent {
       console.error('Not Authorized');
     };
 
-    this.roles = await this.roleService.getRoles();
+    this.roles = await this.roleService.index();
   }
 
   async getPermissions() {
@@ -131,7 +143,14 @@ export class RolesComponent {
   }
 
   async save() {
-    await this.roleService.updateRole(this.roles)
+    let update = await this.roleService.updateRole(this.roles);
+
+    this.setAlert(
+      update.message,
+      update.type
+    );
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   async delay(ms: number) {
@@ -212,6 +231,18 @@ export class RolesComponent {
 
   deleteRole(deletedRole: any) {
     this.roles = this.roles.filter((role: any) => role.id != deletedRole.id);
+  }
+
+  setAlert(message: string = '', type: 'success' | 'warning' | 'danger' | 'info' = 'info') {
+    if (this.show.alert) return;
+
+    this.alertConfig.message = message;
+    this.alertConfig.type = type;
+    this.show.alert = true;
+
+    setTimeout(() => {
+      this.show.alert = false
+    }, 3000);
   }
 
   ngOnInit() {
