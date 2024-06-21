@@ -84,7 +84,7 @@ export class RolesComponent {
       return this.modulePermissions;
     }
 
-    return this.modulePermissions.filter((modulePermission: any) => (modulePermission.module).toLowerCase().includes(this.search.permission.toLowerCase()));
+    return this.modulePermissions.filter((modulePermission: any) => (modulePermission.resource).toLowerCase().includes(this.search.permission.toLowerCase()));
   }
 
   canDeleteRole(roleId: string): boolean {
