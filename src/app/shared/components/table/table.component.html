@@ -1,0 +1,294 @@
+<div class="mb-3 flex gap-3 justify-between items-center">
+    <div class="flex gap-2">
+        <div class="has-[:focus]:border-blue-500 px-3 flex rounded-md items-center border transition duration-150">
+            <mat-icon class="w-full scale-70 opacity-50 scale-75">search</mat-icon>
+
+            <span class="p-3">
+                <input name="search-input" required [(ngModel)]="searchBy.text" (keyup)="navigateToPage('first')"
+                    [placeholder]="(searchBy.prop == '' ? 'Search ' : 'Type ') + config.model + ' ' + searchBy.prop + '...'"
+                    class="w-full outline-none border-r">
+            </span>
+
+            <span
+                class="px-2 flex items-center rounded-full has-[:focus]:bg-blue-50 hover:bg-blue-50 transition duration-150">
+                <mat-icon class="w-full scale-70 opacity-50 scale-75">tune</mat-icon>
+                <span>
+                    <select name="colFilter" id="colFilterSelect" [(ngModel)]="searchBy.prop"
+                        (change)="dataChanged = true"
+                        class="w-full px-2 py-1.5 outline-none bg-transparent font-medium capitalize text-sm text-blue-700">
+                        <option value="">all</option>
+                        <option *ngFor="let col of config.cols" [value]="col.name">{{col.name}}</option>
+                    </select>
+                </span>
+            </span>
+        </div>
+
+        <div class="flex items-center">
+            <span
+                class="px-4 flex items-center rounded-full has-[:focus]:bg-blue-50 hover:bg-blue-50 transition duration-150">
+                <mat-icon *ngIf="viewType == 'list'; else gridIcon"
+                    class="w-full scale-70 opacity-50 scale-75">list</mat-icon>
+                <ng-template #gridIcon>
+                    <mat-icon class="w-full scale-70 opacity-50 scale-75">grid_view</mat-icon>
+                </ng-template>
+
+                <span>
+                    <select name="viewType" id="viewTypeSelect" [(ngModel)]="viewType"
+                        class="w-full px-2 py-1.5 outline-none bg-transparent font-medium capitalize text-sm">
+                        <option value="list">List</option>
+                        <option value="grid">Grid</option>
+                    </select>
+                </span>
+            </span>
+        </div>
+    </div>
+
+    <button *ngIf="config.features.create && !config.features.import" (click)="create()"
+        class="px-3 py-2 gap-2 flex items-center rounded-md has-[:focus]:bg-blue-50 hover:bg-blue-50 hover:text-blue-700 active:scale-90 transition duration-150">
+        <mat-icon class="w-full scale-75">add_circle_outline</mat-icon>
+        <p class="font-medium">Add {{config.model}}</p>
+    </button>
+
+    <div *ngIf="config.features.create && config.features.import"
+        class="p-2 has-[:focus]:border-blue-500 px-3 flex rounded-md items-center border transition duration-150">
+        <span
+            class="px-2 flex items-center rounded-full has-[:focus]:bg-blue-50 hover:bg-blue-50 transition duration-150">
+            <mat-icon class="w-full scale-75">add_circle_outline</mat-icon>
+            <span>
+                <select name="inputPref" id="inputPrefSelect" [(ngModel)]="addType"
+                    class="w-full px-2 py-1.5 outline-none bg-transparent font-medium text-sm">
+                    <option value="create">Create new</option>
+                    <option value="import">Import .csv</option>
+                </select>
+            </span>
+        </span>
+
+        <span class="mx-1 pl-2 border-l">
+            <button *ngIf="addType == 'create'" (click)="create()"
+                class="py-1 px-3 rounded-md hover:bg-blue-50 text-blue-700 active:scale-90 transition duration-150">
+                <p class="font-medium">Add {{config.model}}</p>
+            </button>
+
+            <span *ngIf="addType == 'import' && !selectedFile" (click)="importCsv()" class="px-2 py-0.5 flex gap-1 items-center text-sm cursor-pointer
+                text-blue-700 hover:bg-blue-50 rounded-md transition duration-150">
+                <mat-icon class="w-full scale-75">upload_file</mat-icon>
+                <p class="font-medium">Upload File</p>
+                <input type="file" #fileInput style="display: none;" accept=".csv" (change)="onFileSelected($event)">
+            </span>
+
+            <span *ngIf="addType == 'import' && selectedFile"
+                class="px-2 py-0.5 flex gap-1 items-center text-sm rounded-md transition duration-150">
+                <div class="py-0.5 px-2 hover:text-white text-blue-700 flex items-center justify-center rounded-full
+                    bg-blue-50 hover:bg-blue-500 duration-150 transition font-medium active:scale-90 cursor-pointer"
+                    (click)="importData()">
+                    <mat-icon class="w-full scale-50">upload_file</mat-icon>
+                    <p class="truncate max-w-32">{{ selectedFile.name }}</p>
+                </div>
+                <div class="flex items-center justify-center p-0.5 rounded-full hover:bg-red-500 duration-150 transition hover:text-white"
+                    (click)="clearFile()">
+                    <mat-icon class="w-full scale-50 font-bold">clear</mat-icon>
+                </div>
+            </span>
+        </span>
+    </div>
+</div>
+
+<ng-container *ngIf="!loading; else loadingBar">
+    <table *ngIf="viewType == 'list'; else gridView" class="mb-3 w-full table-auto">
+        <thead>
+            <tr class="font-medium">
+                <th class="p-0 text-start">
+                    <p class="flex items-center gap-2 p-2 rounded-l-lg opacity-70 border-y border-l font-medium">
+                        <mat-icon class="scale-75 group-active:scale-50 transition duration-150">
+                            tag
+                        </mat-icon>
+                        No.
+                    </p>
+                </th>
+                <ng-container *ngFor="let col of config.cols">
+                    <th class="group p-0 text-start ">
+                        <div class="group flex items-center px-5 py-2 group-first:rounded-l-lg opacity-70 border-y group-first:border-l group-last:rounded-r-lg group-last:border-r"
+                            (click)="setSortByValue(col.name)">
+                            <p class="capitalize" [ngClass]="col.css?.cellText"
+                                [class.text-blue-700]="col.name == sortBy.prop">{{col.name}}</p>
+                            <ng-container *ngIf="sortBy.prop == col.name; else notSort" [ngSwitch]="sortBy.order">
+                                <ng-container *ngSwitchCase="'asc'">
+                                    <mat-icon class="scale-75 group-active:scale-50 transition duration-150"
+                                        [class.text-blue-700]="col.name == sortBy.prop">
+                                        arrow_downward
+                                    </mat-icon>
+                                </ng-container>
+                                <ng-container *ngSwitchCase="'desc'">
+                                    <mat-icon class="scale-75 group-active:scale-50 transition duration-150"
+                                        [class.text-blue-700]="col.name == sortBy.prop">
+                                        arrow_upward
+                                    </mat-icon>
+                                </ng-container>
+                                <ng-container *ngSwitchDefault>
+                                    <mat-icon class="scale-75 group-active:scale-50 transition duration-150"
+                                        [class.text-blue-700]="col.name == sortBy.prop">
+                                        unfold_more
+                                    </mat-icon>
+                                </ng-container>
+                            </ng-container>
+
+                            <ng-template #notSort>
+                                <mat-icon class="scale-75 group-active:scale-50 transition duration-150"
+                                    [class.text-blue-700]="col.name == sortBy.prop">
+                                    unfold_more
+                                </mat-icon>
+                            </ng-template>
+                        </div>
+                    </th>
+                </ng-container>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let datum of processedData; index as i" class="hover:bg-slate-50 border-b border-dashed"
+                (click)="click(datum)">
+                <td>
+                    <p class="flex items-center gap-2 p-2 ">
+                        <mat-icon class="scale-75 group-active:scale-50 transition duration-150 opacity-10">
+                            tag
+                        </mat-icon>
+                        {{(i + 1) + ((pagination.current - 1 )* pagination.count) }}
+                    </p>
+                </td>
+                <ng-container *ngFor="let col of config.cols">
+                    <td>
+                        <div class="flex items-center px-5 py-3" [ngClass]="col.css?.cellContainer">
+                            <p [class]="col.css?.cellText">{{datum[col.name]}}</p>
+                        </div>
+                    </td>
+                </ng-container>
+            </tr>
+        </tbody>
+    </table>
+
+    <ng-template #gridView>
+        <div class="mb-3 flex gap-3 items-center">
+            <p class="text sm opacity-50">Sort by:</p>
+            <div *ngFor="let col of config.cols"
+                class="group flex items-center px-5 py-1 opacity-70 rounded-full hover:bg-blue-50"
+                (click)="setSortByValue(col.name)">
+                <p class="capitalize font-medium" [class.text-blue-700]="col.name == sortBy.prop">{{col.name}}</p>
+                <ng-container *ngIf="sortBy.prop == col.name; else notSort" [ngSwitch]="sortBy.order">
+                    <ng-container *ngSwitchCase="'asc'">
+                        <mat-icon class="scale-75 group-active:scale-50 transition duration-150"
+                            [class.text-blue-700]="col.name == sortBy.prop">
+                            arrow_downward
+                        </mat-icon>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'desc'">
+                        <mat-icon class="scale-75 group-active:scale-50 transition duration-150"
+                            [class.text-blue-700]="col.name == sortBy.prop">
+                            arrow_upward
+                        </mat-icon>
+                    </ng-container>
+                    <ng-container *ngSwitchDefault>
+                        <mat-icon class="scale-75 group-active:scale-50 transition duration-150"
+                            [class.text-blue-700]="col.name == sortBy.prop">
+                            unfold_more
+                        </mat-icon>
+                    </ng-container>
+                </ng-container>
+
+                <ng-template #notSort>
+                    <mat-icon class="scale-75 group-active:scale-50 transition duration-150">
+                        unfold_more
+                    </mat-icon>
+                </ng-template>
+            </div>
+        </div>
+
+        <div class="mb-3 grid grid-cols-3 gap-4">
+            <div *ngFor="let datum of processedData" class="p-3 flex gap-3 items-center border rounded-md
+            hover:bg-blue-50 active:scale-90 transition duration-150 cursor-pointer" (click)="click(datum)">
+                <div *ngIf="config.grid.imageProp" class="w-16 aspect-square rounded-full border">
+                    <!-- TODO: ADD PICTURE -->
+                </div>
+                <div>
+                    <ng-container *ngFor="let col of config.cols">
+                        <p *ngIf="col.name != config.grid.titleProp; else titlePropDisplay" class=" opacity-50 text-sm">
+                            {{col.name + ": " + datum[col.name]}}</p>
+                        <ng-template #titlePropDisplay>
+                            <h4 class="font-medium">{{ datum[col.name]}}</h4>
+                        </ng-template>
+                    </ng-container>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+</ng-container>
+
+<ng-template #loadingBar>
+    <mat-progress-bar class="my-3" mode="query"></mat-progress-bar>
+</ng-template>
+
+
+<div class="flex gap-3 justify-between items-center">
+    <div class="flex gap-3 items-center text-sm ">
+        <p class="opacity-70">Items per page : </p>
+        <div
+            class="has-[:focus]:border-blue-500 px-1 flex rounded-md items-center border active:scale-90 transition duration-150">
+            <span>
+                <select name="dataPerPage" id="dataPerPageSelect" class="w-full px-2 py-1.5 outline-none"
+                    [(ngModel)]="pagination.count" (change)="navigateToPage('first')">
+                    <option value="15">15</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select>
+            </span>
+        </div>
+    </div>
+
+    <div class="flex gap-3 items-center">
+        <div *ngIf="pagination.total > 2" class="w-7 aspect-square flex items-center justify-center rounded
+             active:scale-90 hover:bg-blue-50 active:text-blue-500" (click)="navigateToPage('first')">
+            <mat-icon class="scale-75">
+                first_page
+            </mat-icon>
+        </div>
+
+        <div *ngIf="pagination.total > 1" class="w-7 aspect-square flex items-center justify-center rounded
+             active:scale-90 hover:bg-blue-50 active:text-blue-500" (click)="navigateToPage('previous')">
+            <mat-icon class="scale-75">
+                navigate_before
+            </mat-icon>
+        </div>
+
+        <div *ngIf="pagination.current > 3 && pagination.total > 5">
+            <p>...</p>
+        </div>
+        <ng-container *ngFor="let page of [].constructor(pagination.total); let i = index">
+            <div *ngIf="(pagination.current < 3 && ((i+1) <= 5)) || ((i+1) < (pagination.current + 3) && (i+1) > (pagination.current - 3)) || ((3 > (pagination.total-pagination.current)) && ((i+1) > pagination.current - (5-(pagination.total-pagination.current))))"
+                (click)="navigateToPage('open', i + 1)"
+                class="w-7 aspect-square flex items-center justify-center rounded hover:bg-blue-50 active:scale-90 cursor-pointer transition duration-150"
+                [ngClass]="{'text-blue-700 bg-blue-50': i + 1 == pagination.current}">
+                <p class="opacity-70 text-sm font-medium">{{i + 1}}</p>
+            </div>
+        </ng-container>
+        <div *ngIf="pagination.current < (pagination.total - 3)">
+            <p>...</p>
+        </div>
+
+        <div *ngIf="pagination.total > 1" class="w-7 aspect-square flex items-center justify-center rounded
+            active:scale-90 hover:bg-blue-50 active:text-blue-500" (click)="navigateToPage('next')">
+            <mat-icon class="scale-75">
+                navigate_next
+            </mat-icon>
+        </div>
+        <div *ngIf="pagination.total > 2" class="w-7 aspect-square flex items-center justify-center rounded
+            active:scale-90 hover:bg-blue-50 active:text-blue-500" (click)="navigateToPage('last')">
+            <mat-icon class="scale-75">
+                last_page
+            </mat-icon>
+        </div>
+    </div>
+
+    <p class="text-sm opacity-70">
+        Showing {{pagination.start + (processedData.length > 0 ? 1 : 0)}} - {{pagination.end - (pagination.count -
+        processedData.length)}} out of
+        {{pagination.length}}
+    </p>
+</div>

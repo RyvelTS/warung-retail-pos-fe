@@ -5,11 +5,35 @@
     </app-sidebar>
 
     <div class="w-full flex flex-col">
-        <div class="w-full p-3 flex gap-3 justify-end border-b items-center">
-            <div class="h-8 aspect-square border">
+        <div class="w-full p-2 flex gap-3 justify-end border-b items-center">
 
-            </div>
-            <h4>{{user.name}}</h4>
+            <button mat-button [matMenuTriggerFor]="menu">
+                <div class="py-1 flex gap-2 items-center">
+                    <div class="h-8 aspect-square border rounded-full">
+                        <!-- TODO: Add User Picture here -->
+                    </div>
+                    <h4>{{user.name}}</h4>
+                </div>
+            </button>
+            <mat-menu #menu="matMenu">
+                <button mat-menu-item>
+                    <p class="flex items-center">
+                        <mat-icon class=" scale-75">
+                            account_circle
+                        </mat-icon>
+                        <span>Account</span>
+                    </p>
+                </button>
+                <hr>
+                <button mat-menu-item (click)="logout($event)">
+                    <p class="flex items-center">
+                        <mat-icon class=" scale-75">
+                            logout
+                        </mat-icon>
+                        <span>Logout</span>
+                    </p>
+                </button>
+            </mat-menu>
         </div>
 
         <div class="w-full flex grow overflow-y-auto">

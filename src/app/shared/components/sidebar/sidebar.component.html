@@ -10,9 +10,10 @@
         <div>
             <ng-container *ngFor="let link of navLinks">
                 <a *appPermissions="link.permissions" [routerLink]="'/' + link.link"
-                    routerLinkActive="font-bold border-r border-r-8" [routerLinkActiveOptions]="{exact: true}"
+                    routerLinkActive="font-bold border-r border-r-8"
+                    [routerLinkActiveOptions]="{exact: link.exact ?? false}"
                     class="px-4 py-3 flex gap-2 items-center border-b rounded hover:bg-slate-100 duration-300 transition opacity-80 hover:opacity-100 active:scale-90">
-                    <mat-icon class="scale-75">
+                    <mat-icon class=" scale-75">
                         {{link.icon}}
                     </mat-icon>
 
@@ -20,10 +21,5 @@
                 </a>
             </ng-container>
         </div>
-    </div>
-
-    <div class="border-t pt-3">
-        <button (click)="logout($event)"
-            class="w-full py-3 border rounded hover:bg-slate-100 duration-300 transition font-medium">Logout</button>
     </div>
 </div>

@@ -8,6 +8,7 @@ import { AuthService, LoginData } from '../../../../core/services/auth.service';
 import { AngularFormsModule } from '../../../../shared/modules/angular-forms/angular-forms.module';
 import { AlertComponent, AlertConfig } from '../../../../shared/components/alert/alert.component';
 import { CommonModule } from '@angular/common';
+import { ButtonComponent } from '../../../../shared/components/button/button.component';
 
 @Component({
   selector: 'app-login',
@@ -19,7 +20,8 @@ import { CommonModule } from '@angular/common';
     MatIconModule,
     RouterModule,
     AngularFormsModule,
-    AlertComponent
+    AlertComponent,
+    ButtonComponent
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'

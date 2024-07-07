@@ -17,7 +17,7 @@
                             <mat-label>Email</mat-label>
                             <input name="email" required type="email" matInput [(ngModel)]="data.email"
                                 placeholder="Type your email">
-                            <mat-icon matSuffix>email</mat-icon>
+                            <mat-icon matSuffix class="scale-90">email</mat-icon>
                             <mat-hint>{{'e.g : example@domain.com'}}</mat-hint>
                         </mat-form-field>
                     </div>
@@ -29,7 +29,7 @@
                                 [(ngModel)]="data.password" placeholder="Password">
                             <span class="pr-4" matSuffix (click)="setPasswordVisibility($event)"
                                 [attr.aria-label]="'Hide password'" [attr.aria-pressed]="show.password">
-                                <mat-icon class="text-text-secondary hover:text-text-primary">
+                                <mat-icon class="text-text-secondary hover:text-text-primary scale-90">
                                     {{show.password ? 'visibility_off' : 'visibility'}}
                                 </mat-icon>
                             </span>
@@ -43,8 +43,9 @@
 
             <div>
                 <p class="mb-3">
-                    <button (click)="login($event)"
-                        class="w-full py-3 border rounded hover:bg-slate-100 duration-300 transition font-medium">Login</button>
+                    <app-button (click)="login($event)">
+                        <p>Login</p>
+                    </app-button>
                 </p>
                 <p class="text-center">
                     <a [routerLink]="['/register']"

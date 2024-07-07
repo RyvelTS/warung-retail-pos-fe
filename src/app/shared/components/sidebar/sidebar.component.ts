@@ -1,7 +1,5 @@
 import { Component } from '@angular/core';
 import { AngularMaterialModule } from '../../modules/angular-material/angular-material.module';
-import { AuthService } from '../../../core/services/auth.service';
-import { Router } from '@angular/router';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { PermissionsDirective } from '../../../core/directives/permissions.directive';
@@ -18,13 +16,15 @@ export class SidebarComponent {
     icon: string,
     link: string,
     name: string,
-    permissions: string[]
+    permissions: string[],
+    exact?: boolean
   }[] = [
       {
         icon: 'home',
         link: '',
         name: 'home',
-        permissions: []
+        permissions: [],
+        exact: true
       },
       {
         icon: 'receipt_long',
@@ -57,21 +57,4 @@ export class SidebarComponent {
         permissions: ['read:users']
       }
     ];
-
-  constructor(
-    private authService: AuthService,
-    private router: Router
-  ) {
-  }
-
-  async logout(event: Event) {
-    event.preventDefault();
-    try {
-      await this.authService.logout();
-    } catch (error) {
-      console.error(error)
-    }
-
-    this.router.navigate(['login']);
-  }
 }
