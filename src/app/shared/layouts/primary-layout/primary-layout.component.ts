@@ -20,7 +20,12 @@ export class PrimaryLayoutComponent {
 
   async logout(event: Event) {
     event.preventDefault();
-    await this.authService.logout();
+    try {
+      await this.authService.logout();
+    } catch (error) {
+      console.error(error)
+    }
+
     this.router.navigate(['login']);
   }
 

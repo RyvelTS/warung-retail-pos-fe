@@ -1,7 +1,20 @@
-/* You can add global styles to this file, and also import other style files */
+// Material
+@use '@angular/material' as mat;
+@include mat.core();
+
+//tailwind
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+:root {
+    font-size: 14px;
+
+    .mat-mdc-form-field-infix {
+        padding-top: calc(var(--mat-form-field-container-vertical-padding) + 1px) !important;
+    }
+}
 
 html,
 body {

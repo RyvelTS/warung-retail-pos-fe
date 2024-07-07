@@ -85,14 +85,46 @@ export class AuthService {
     return response;
   }
 
-  async register(data: RegisterData): Promise<Boolean> {
+  async register(data: RegisterData): Promise<Response> {
+    let response: Response = new Response(
+      'info',
+      '',
+      200,
+      undefined
+    );
+
     try {
-      await axios.post(`${environment.api_url}/users`, data);
-    } catch (error) {
-      return false;
+      let res = await axios.post(`${environment.api_url}/users`, data);
+      response.data = res.data;
+      response.message = 'Successfully Registered';
+      response.type = 'success';
+    } catch (error: any) {
+      error = error.toJSON();
+      response.status = error.status;
+      switch (error.status) {
+        case 404:
+          response.type = 'danger'
+          response.message = 'No user found. Please verify the email address and try again'
+          break;
+
+        case 401:
+          response.type = 'warning'
+          response.message = 'Incorrect credentials. Please check your password, then try again'
+          break;
+
+        case 400:
+          response.type = 'warning'
+          response.message = 'Please ensure your email address and password are in the correct format'
+          break;
+
+        default:
+          response.type = 'danger'
+          response.message = 'Sorry, something went wrong. Please try again later.'
+          break;
+      }
     }
 
-    return true;
+    return response;
   }
 
   async isAuthenticated(): Promise<boolean> {

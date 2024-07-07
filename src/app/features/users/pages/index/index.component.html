@@ -1,24 +1,24 @@
 <app-primary-layout>
-    <div class="w-full p-5">
-        <div class="my-8">
-            <h2 class="text-3xl font-bold whitespace-nowrap">User Management</h2>
-            <p class="mb-2 text-base font-semibold leading-7 opacity-50">
-                Efficiently manage user data
-            </p>
+    <div class="w-full p-10">
+        <div class="mb-10 w-full lg:text-center flex gap-5 items-center">
+            <div class="w-1/5 hidden lg:block">
+                <hr>
+            </div>
+
+            <div class="lg:w-3/5">
+                <h2 class="text-3xl font-bold whitespace-nowrap">User Management</h2>
+                <p class="mb-2 text-base font-semibold leading-7 opacity-50">
+                    Streamline User Management: Simplify Administration and Enhance Security
+                </p>
+            </div>
+
+            <div class="w-full lg:w-1/5">
+                <hr>
+            </div>
         </div>
-        <table class="w-full table-auto">
-            <thead class="bg-slate-100">
-                <tr class="font-medium">
-                    <th class="px-3 py-2 text-start">Name</th>
-                    <th class="px-3 py-2 text-start">Email</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let user of users" class="border-b hover:bg-slate-50" (click)="viewUser(user)">
-                    <td class="px-3 py-2">{{user.name}}</td>
-                    <td class="px-3 py-2">{{user.email}}</td>
-                </tr>
-            </tbody>
-        </table>
+
+        <div class="p-5 rounded-lg shadow-[-8px_0px_24px_8px_#edf2f7]">
+            <app-table [config]="tableConfig"></app-table>
+        </div>
     </div>
 </app-primary-layout>
