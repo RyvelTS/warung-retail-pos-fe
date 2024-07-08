@@ -16,6 +16,11 @@
             </div>
         </div>
 
+        <div class="mb-3">
+            <app-alert *ngIf="show.alert" [config]="alertConfig">
+            </app-alert>
+        </div>
+
         <div class="mb-3 flex gap-3 items-center">
             <p class="text-nowrap opacity-50">General Information</p>
             <hr class="w-full">

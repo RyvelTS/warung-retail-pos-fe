@@ -39,6 +39,7 @@ export class UserService {
         }
       });
 
+      response.type = 'success';
       response.status = res.status;
       response.message = 'Successfully retrieved user data';
       users = res.data.users.map((userData: any) => {
@@ -104,14 +105,54 @@ export class UserService {
     return user;
   }
 
-  async update(user: User): Promise<User | undefined> {
-    try {
-      await axiosInstance.patch('/users/' + user.id, user);
-    } catch (error) {
-      console.error(error)
-      return undefined
+  async update(user: User): Promise<Response> {
+    let response: Response = {
+      type: 'info',
+      message: '',
+      status: 200,
+      data: {}
     }
 
-    return user;
+    try {
+      let res = await axiosInstance.patch('/users/' + user.id, user);
+      response.type = 'success';
+      response.status = res.status;
+      response.message = 'Successfully update user data';
+      let userData = new User(
+        res.data.id,
+        res.data.name,
+        res.data.email,
+        res.data.roles
+      );
+
+      response.data = userData;
+    } catch (error: any) {
+      console.error(error)
+      error = error.toJSON();
+      response.status = error.status;
+      switch (error.status) {
+        case 404:
+          response.type = 'danger'
+          response.message = 'User not found'
+          break;
+
+        case 403:
+          response.type = 'danger'
+          response.message = 'Access denied, Please contact the administrator for further assistance'
+          break;
+
+        case 400:
+          response.type = 'warning'
+          response.message = 'Please ensure your input format'
+          break;
+
+        default:
+          response.type = 'danger'
+          response.message = 'Sorry, something went wrong. Please try again later.'
+          break;
+      }
+    }
+
+    return response;
   }
 }
