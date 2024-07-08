@@ -10,6 +10,7 @@ import { ButtonComponent } from '../../../../shared/components/button/button.com
 import { TableComponent, TableConfig } from '../../../../shared/components/table/table.component';
 import { Query } from '../../../../core/models/query';
 import { Response } from '../../../../core/models/response';
+import { RbacService } from '../../../../core/services/rbac.service';
 
 @Component({
   selector: 'app-index',
@@ -58,17 +59,16 @@ export class IndexComponent {
   }
 
   constructor(
+    public router: Router,
     private userService: UserService,
-    public router: Router
+    private rbacService: RbacService
   ) { }
 
   async getUsers(query: Query) {
-    console.log('Q:', query);
     let response = await this.userService.index(
       query
     );
 
-    console.log('R:', response);
     return response;
   }
 
@@ -76,10 +76,17 @@ export class IndexComponent {
     this.router.navigate(['/users/' + user.id]);
   }
 
+  canCreateUser() {
+    return this.rbacService.checkPermission(['create:users'])
+  }
+
   createUser() {
+    if (!this.canCreateUser()) return;
     this.router.navigate(['/users/create']);
   }
 
   ngOnInit() {
+    this.tableConfig.features.create = this.canCreateUser();
+    // this.tableConfig.features.import = this.canCreateUser();
   }
 }

@@ -3,7 +3,7 @@
         <div class="my-3">
             <span class="mb-3 flex items-center text-sm font-medium text-slate-700/50">
                 <mat-icon>navigate_next</mat-icon>
-                <a [routerLink]="'/users'" class="hover:text-slate-700 duration15"> Users</a>
+                <a [routerLink]="'/users'" class="hover:text-blue-700 duration-150 transition"> Users</a>
                 <mat-icon>navigate_next</mat-icon>
                 <p>Create</p>
             </span>
@@ -15,9 +15,6 @@
                 </p>
             </div>
         </div>
-
-        <app-alert *ngIf="show.alert" [config]="alertConfig">
-        </app-alert>
 
         <div class="mb-3 flex gap-3 items-center">
             <p class="text-nowrap opacity-50">General Information</p>
@@ -76,7 +73,7 @@
             </mat-form-field>
         </div>
 
-        <div class="mb-3 flex gap-3 items-center">
+        <div *appPermissions="['read:roles']" class="mb-3 flex gap-3 items-center">
             <p class="text-nowrap opacity-50">Permission</p>
             <hr class="w-full">
         </div>
@@ -92,7 +89,12 @@
             </mat-form-field>
         </div>
 
-        <div class="h-24">
+        <div class="mb-3">
+            <app-alert *ngIf="show.alert" [config]="alertConfig">
+            </app-alert>
+        </div>
+
+        <div class="h-24" *appPermissions="['create:users']">
             <app-button icon="add_circle_outline" (click)="save()">
                 <p>Add User</p>
             </app-button>

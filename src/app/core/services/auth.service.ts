@@ -114,7 +114,7 @@ export class AuthService {
 
         case 400:
           response.type = 'warning'
-          response.message = 'Please ensure your email address and password are in the correct format'
+          response.message = 'Please ensure the email address and password are in the correct format'
           break;
 
         default:

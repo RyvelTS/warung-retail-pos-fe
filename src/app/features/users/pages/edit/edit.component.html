@@ -1,33 +1,78 @@
 <app-primary-layout>
     <div *ngIf="!loading" class="w-full p-5">
-        <div class="px-4 sm:px-0">
-            <h3 class="text-base font-semibold leading-7 text-gray-900">User Information</h3>
-            <p class="mt-1 max-w-2xl text-sm leading-6 text-gray-500">User details</p>
+
+        <div class="my-3">
+            <span class="mb-3 flex items-center text-sm font-medium text-slate-700/50">
+                <mat-icon>navigate_next</mat-icon>
+                <a [routerLink]="'/users'" class="hover:text-blue-700 duration-150 transition"> Users</a>
+                <mat-icon>navigate_next</mat-icon>
+                <p>{{user?.name}}</p>
+            </span>
+
+            <div class="my-5">
+                <h3 class="my-2 text-2xl font-bold whitespace-nowrap"><span class="capitalize">{{user?.name}} </span> -
+                    {{user?.email}}</h3>
+                <p>Provide the necessary user information and permissions to edit this account</p>
+            </div>
         </div>
 
-        <div class="mt-6 border-t border-gray-100">
-            <dl class="divide-y divide-gray-100">
-                <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                    <dt class="text-sm font-medium leading-6 text-gray-900">Full name</dt>
-                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{user?.name}}</dd>
-                </div>
-                <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                    <dt class="text-sm font-medium leading-6 text-gray-900">Email address</dt>
-                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+        <div class="mb-3 flex gap-3 items-center">
+            <p class="text-nowrap opacity-50">General Information</p>
+            <hr class="w-full">
+        </div>
+
+        <div *ngIf="canUpdateUser(); else readOnly" class="mb-5">
+            <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Name</mat-label>
+                <input name="name" required matInput [(ngModel)]="user!.name" [disabled]="!canUpdateUser()"
+                    placeholder="Type the username">
+                <mat-hint>{{'ex: john doe, will be displayed accross the application'}}</mat-hint>
+            </mat-form-field>
+        </div>
+
+        <ng-template #readOnly>
+            <div class="mb-5">
+                <dl>
+                    <div class="px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                        <dt>Name</dt>
+                        <dd class="mt-1 sm:col-span-2 sm:mt-0">
+                            {{user?.name}}</dd>
+                    </div>
+                </dl>
+            </div>
+        </ng-template>
+
+        <div class="mb-3 flex gap-3 items-center">
+            <p class="text-nowrap opacity-50">Authentication</p>
+            <hr class="w-full">
+        </div>
+
+        <div class="mb-5">
+            <dl>
+                <div class="px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                    <dt>Email address</dt>
+                    <dd class="mt-1 sm:col-span-2 sm:mt-0">
                         {{user?.email}}</dd>
-                </div>
-                <div *appPermissions="['read:roles']" class="px-4 py-6">
-                    <mat-form-field appearance="outline" class="w-full">
-                        <mat-label>Roles</mat-label>
-                        <mat-select multiple [(ngModel)]="userRoles" [disabled]="!canUpdateUser()">
-                            @for (role of roles; track role) {
-                            <mat-option [value]="role.id" class="capitalize">{{role.name}}</mat-option>
-                            }
-                        </mat-select>
-                    </mat-form-field>
                 </div>
             </dl>
         </div>
+
+        <div *appPermissions="['read:roles']" class="flex gap-3 items-center">
+            <p class="text-nowrap opacity-50">Permission</p>
+            <hr class="w-full">
+        </div>
+
+        <div *appPermissions="['read:roles']" class="py-6">
+            <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Roles</mat-label>
+                <mat-select multiple [(ngModel)]="userRoles" [disabled]="!canUpdateUser()">
+                    @for (role of roles; track role) {
+                    <mat-option [value]="role.id" class="capitalize">{{role.name}}</mat-option>
+                    }
+                </mat-select>
+            </mat-form-field>
+        </div>
+
         <div *appPermissions="['update:users']" class="w-full">
             <button (click)="save()"
                 class="w-full py-3 border rounded hover:bg-slate-100 duration-300 transition font-medium">

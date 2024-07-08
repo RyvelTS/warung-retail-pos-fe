@@ -3,7 +3,7 @@ import { PrimaryLayoutComponent } from '../../../../shared/layouts/primary-layou
 import { CommonModule } from '@angular/common';
 import { AngularMaterialModule } from '../../../../shared/modules/angular-material/angular-material.module';
 import { PermissionsDirective } from '../../../../core/directives/permissions.directive';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { User } from '../../../../core/models/user';
 import { UserService } from '../../services/user.service';
 import { Role } from '../../../../core/models/role';
@@ -13,7 +13,7 @@ import { RbacService } from '../../../../core/services/rbac.service';
 @Component({
   selector: 'app-edit',
   standalone: true,
-  imports: [PrimaryLayoutComponent, CommonModule, AngularMaterialModule, PermissionsDirective],
+  imports: [PrimaryLayoutComponent, CommonModule, AngularMaterialModule, PermissionsDirective, RouterModule],
   templateUrl: './edit.component.html',
   styleUrl: './edit.component.scss'
 })
@@ -28,7 +28,8 @@ export class EditComponent {
     private activatedRoute: ActivatedRoute,
     private userService: UserService,
     private roleService: RoleService,
-    private rbacService: RbacService
+    private rbacService: RbacService,
+    private router: Router
   ) {
     this.paramId = activatedRoute.snapshot.params['id'];
   }
@@ -59,8 +60,6 @@ export class EditComponent {
       this.user.roles = newUserRoles;
       this.user = await this.userService.update(this.user);
     }
-
-    console.log('UPDATED')
   }
 
   async setup() {

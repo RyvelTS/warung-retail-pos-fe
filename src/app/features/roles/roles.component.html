@@ -70,7 +70,7 @@
                                 class="min-w-32 border-b px-5 relative flex flex-col h-20 items-center justify-center">
                                 <div class="py-2">
                                     <div>
-                                        <input type="text" disabled="canUpdateRole()"
+                                        <input type="text" [disabled]="!canUpdateRole()"
                                             class="py-2 text-center font-bold outline-transparent bg-transparent capitalize"
                                             [(ngModel)]="role.name" placeholder="Untitled Role">
                                     </div>
