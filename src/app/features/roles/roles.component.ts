@@ -150,7 +150,7 @@ export class RolesComponent {
       update.type
     );
 
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    await this.scroll('1', 'alert');
   }
 
   async delay(ms: number) {

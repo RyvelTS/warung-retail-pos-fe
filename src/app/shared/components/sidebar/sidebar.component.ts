@@ -39,10 +39,10 @@ export class SidebarComponent {
         permissions: []
       },
       {
-        icon: 'inventory2',
+        icon: 'chair',
         link: 'products',
         name: 'products',
-        permissions: []
+        permissions: ['read:products']
       },
       {
         icon: 'key',

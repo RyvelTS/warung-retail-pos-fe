@@ -5,7 +5,7 @@
 
             <span class="p-3">
                 <input name="search-input" required [(ngModel)]="searchBy.text" (keyup)="navigateToPage('first')"
-                    [placeholder]="(searchBy.prop == '' ? 'Search ' : 'Type ') + config.model + ' ' + searchBy.prop + '...'"
+                    [placeholder]="(searchBy.prop == '' ? 'Search ' : 'Type ') + (searchBy.prop == '' ? pluralModelText : config.model)  + ' ' + searchBy.prop + '...'"
                     class="w-full outline-none border-r">
             </span>
 
@@ -157,7 +157,30 @@
                 <ng-container *ngFor="let col of config.cols">
                     <td>
                         <div class="flex items-center px-5 py-3" [ngClass]="col.css?.cellContainer">
-                            <p [class]="col.css?.cellText">{{datum[col.name]}}</p>
+                            <ng-container [ngSwitch]="col.type">
+                                <ng-container *ngSwitchCase="'boolean'">
+                                    <p *ngIf="datum[col.name]; else falseIndicator"
+                                        class="flex p-0.5 items-center justify-center rounded-full bg-blue-50">
+                                        <mat-icon class="text-center text-blue-500 scale-75">
+                                            check_circle
+                                        </mat-icon>
+                                    </p>
+
+                                    <ng-template #falseIndicator>
+                                        <p class="flex p-0.5 items-center justify-center rounded-full bg-slate-50">
+                                            <mat-icon class="text-center text-gray-200 scale-75">
+                                                cancel
+                                            </mat-icon>
+                                        </p>
+                                    </ng-template>
+                                </ng-container>
+                                <ng-container *ngSwitchCase="'currency'">
+                                    <p [class]="col.css?.cellText">{{datum[col.name] | currency:'':''}}</p>
+                                </ng-container>
+                                <ng-container *ngSwitchDefault>
+                                    <p [class]="col.css?.cellText">{{datum[col.name]}}</p>
+                                </ng-container>
+                            </ng-container>
                         </div>
                     </td>
                 </ng-container>
@@ -209,8 +232,31 @@
                 </div>
                 <div>
                     <ng-container *ngFor="let col of config.cols">
-                        <p *ngIf="col.name != config.grid.titleProp; else titlePropDisplay" class=" opacity-50 text-sm">
-                            {{col.name + ": " + datum[col.name]}}</p>
+                        <ng-container *ngIf="col.name != config.grid.titleProp; else titlePropDisplay">
+                            <ng-container [ngSwitch]="col.type">
+                                <ng-container *ngSwitchCase="'boolean'">
+                                    <div class="flex items-center gap-2">
+                                        <p class="text-sm opacity-50">{{col.name + ": "}}</p>
+                                        <div class="flex p-0.5 items-center justify-center rounded-full "
+                                            [ngClass]="datum[col.name] ? 'bg-blue-50 text-blue-700' : 'bg-slate-50 text-gray-300'">
+                                            <mat-icon class="text-center scale-75">
+                                                {{datum[col.name] ? 'check_circle' : 'cancel'}}
+                                            </mat-icon>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                                <ng-container *ngSwitchCase="'currency'">
+                                    <p [class]="col.css?.cellText" class=" opacity-50 text-sm"><span>{{col.name + ":
+                                            "}}</span>{{datum[col.name] |
+                                        currency:'':''}}</p>
+                                </ng-container>
+                                <ng-container *ngSwitchDefault>
+                                    <p [class]="col.css?.cellText" class=" opacity-50 text-sm"><span>{{col.name + ":
+                                            "}}</span>{{datum[col.name]}}
+                                    </p>
+                                </ng-container>
+                            </ng-container>
+                        </ng-container>
                         <ng-template #titlePropDisplay>
                             <h4 class="font-medium">{{ datum[col.name]}}</h4>
                         </ng-template>

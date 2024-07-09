@@ -1,44 +1,171 @@
-<app-primary-layout>
-  <div class="w-full p-5">
-    <div class="p-5 lg:w-3/5 mx-auto">
-      <h2 class="text-3xl font-bold mb-5 text-center">Update Product</h2>
+<div class="my-3">
+  <span class="mb-3 flex items-center text-sm font-medium text-slate-700/50">
+    <mat-icon>navigate_next</mat-icon>
+    <a [routerLink]="'/products'" class="hover:text-blue-700 duration-150 transition"> Products</a>
+    <mat-icon>navigate_next</mat-icon>
+    <p class="capitalize">{{product.name}}</p>
+  </span>
 
-      <mat-form-field class="w-full mb-4">
-        <mat-label>Name</mat-label>
-        <input matInput />
-      </mat-form-field>
-
-      <mat-form-field class="w-full mb-4">
-        <mat-label>Description</mat-label>
-        <textarea matInput></textarea>
-      </mat-form-field>
-
-      <mat-form-field class="w-full mb-4">
-        <mat-label>Status</mat-label>
-        <mat-select>
-          <mat-option value="active">Active</mat-option>
-          <mat-option value="inactive">Inactive</mat-option>
-        </mat-select>
-      </mat-form-field>
-
-      <mat-form-field class="w-full mb-4">
-        <mat-label>Price</mat-label>
-        <input matInput type="number" />
-      </mat-form-field>
-
-      <mat-form-field class="w-full mb-4">
-        <mat-label>Quantity</mat-label>
-        <input matInput type="number" />
-      </mat-form-field>
-
-      <mat-form-field class="w-full mb-4">
-        <mat-label>SKU</mat-label>
-        <input matInput />
-      </mat-form-field>
-
-      <div class="flex justify-end">
-        <button mat-raised-button color="primary">Update</button>
-      </div>
+  <div class="my-5 flex gap-4 justify-between items-center" *appPermissions="['update:products'];else readOnly">
+    <div>
+      <h3 class="my-2 text-2xl font-bold whitespace-nowrap">Update: {{product.name}}</h3>
+      <p>Easily edit your product information to keep your offerings fresh</p>
+    </div>
+    <div>
+      <p class="px-3 py-2 rounded-full scale-90" [ngClass]="product.isActive ? 'bg-blue-50' : 'bg-slate-50'">
+        <mat-slide-toggle [(ngModel)]="product.isActive">
+          <span class="ml-2 font-bold text-base" [ngClass]="product.isActive ? 'text-blue-700' : 'text-gray-300'">
+            {{product.isActive ? 'Active' : 'Inactive'}}
+          </span>
+        </mat-slide-toggle>
+      </p>
     </div>
   </div>
-</app-primary-layout>
+
+  <ng-template #readOnly>
+    <div class="my-5 flex gap-4 justify-between items-center">
+      <div>
+        <h3 class="my-2 text-2xl font-bold whitespace-nowrap">{{product.name}}</h3>
+        <p>SKU: {{product.sku}}</p>
+      </div>
+      <div>
+        <div class="px-5 py-2 flex items-center gap-2 rounded-full"
+          [ngClass]="product.isActive ? 'bg-blue-50 text-blue-700' : 'bg-slate-50 text-gray-300'">
+          <mat-icon class="scale-75">
+            {{product.isActive ? 'check_circle' : 'cancel'}}
+          </mat-icon>
+          <p class="font-medium">
+            {{product.isActive ? 'Active' : 'Inactive'}}
+          </p>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</div>
+
+<div class="mb-3 flex gap-3 items-center">
+  <p class="text-nowrap opacity-50">Product Information</p>
+  <hr class="w-full">
+</div>
+
+<div class="mb-5 flex gap-5">
+  <div class="w-full">
+    <div class="w-full aspect-video flex items-center justify-center rounded border-dashed border">
+      <mat-icon class="opacity-30">
+        image
+      </mat-icon>
+    </div>
+  </div>
+  <div class="w-full" *appPermissions="['update:products'];else readOnlyProductInfo">
+    <div class="mb-5">
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Name</mat-label>
+        <input name="productName" required matInput [(ngModel)]="product.name" placeholder="Type the product name">
+        <mat-hint>product name will be displayed to customer</mat-hint>
+      </mat-form-field>
+    </div>
+
+    <div class="mb-5">
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>SKU</mat-label>
+        <input name="productSku" required matInput [(ngModel)]="product.sku" placeholder="Type the product sku">
+      </mat-form-field>
+    </div>
+
+    <div class="mb-5">
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Description</mat-label>
+        <textarea [(ngModel)]="product.description" rows="2" matInput placeholder="Type Product Description"></textarea>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <ng-template #readOnlyProductInfo>
+    <div class="w-full">
+      <table class="table-auto w-full">
+        <tr class="border-b border-slate-100">
+          <td class="opacity-50 min-w-32">
+            Name
+          </td>
+          <td class="font-medium py-2">
+            {{product.name}}
+          </td>
+        </tr>
+        <tr class="border-b border-slate-100">
+          <td class="opacity-50">
+            SKU
+          </td>
+          <td class="font-medium py-2">
+            {{product.sku}}
+          </td>
+        </tr>
+        <tr class="border-b border-slate-100">
+          <td class="opacity-50">
+            Description
+          </td>
+          <td class="font-medium py-2">
+            {{product.description}}
+          </td>
+        </tr>
+      </table>
+    </div>
+  </ng-template>
+</div>
+
+<div class="mb-3 flex gap-3 items-center">
+  <p class="text-nowrap opacity-50">Stock Information</p>
+  <hr class="w-full">
+</div>
+
+<div *appPermissions="['update:products'];else readOnlyProductStockInfo">
+  <div class="mb-5">
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Sell Price</mat-label>
+      <mat-icon matPrefix class="scale-90">sell</mat-icon>
+      <input name="productPrice" type="number" step="0.01" required matInput [(ngModel)]="product.price"
+        placeholder="Enter the product price">
+    </mat-form-field>
+  </div>
+  <div class="mb-5">
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Stock Amount</mat-label>
+      <mat-icon matPrefix class="scale-90">inventory</mat-icon>
+      <input name="productStock" type="number" step="0.01" required matInput [(ngModel)]="product.stock"
+        placeholder="Enter the product stock amount">
+    </mat-form-field>
+  </div>
+</div>
+
+<ng-template #readOnlyProductStockInfo>
+  <div>
+    <table class="table-auto w-full">
+      <tr class="border-b border-slate-100">
+        <td class="opacity-50 w-20">
+          Price
+        </td>
+        <td class="font-medium py-2">
+          {{product.price | currency:'':''}}
+        </td>
+      </tr>
+      <tr class="border-b border-slate-100">
+        <td class="opacity-50">
+          Stock
+        </td>
+        <td class="font-medium py-2">
+          {{product.stock}}
+        </td>
+      </tr>
+    </table>
+  </div>
+</ng-template>
+
+<div class="mb-3">
+  <app-alert *ngIf="show.alert" [config]="alertConfig">
+  </app-alert>
+</div>
+
+<div *appPermissions="['update:products']">
+  <app-button icon="save" (click)="update()">
+    <p>Update Product</p>
+  </app-button>
+</div>

@@ -8,6 +8,7 @@ import { Query } from '../../../core/models/query';
 import { Response } from '../../../core/models/response';
 import { first } from 'rxjs';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import * as pluralize from 'pluralize';
 
 export interface TableConfig {
   model: string,
@@ -19,6 +20,7 @@ export interface TableConfig {
     name: string,
     sortable: boolean,
     icon?: string,
+    type?: string,
     css?: {
       cellContainer: string,
       cellText: string,
@@ -72,308 +74,7 @@ export class TableComponent {
     },
   }
 
-  @Input() data: any[] = [
-    {
-      id: 1,
-      name: 'Sarah Clark',
-      email: 'sarah.clark123@example.com',
-      role: 'Manager'
-    },
-    {
-      id: 2,
-      name: 'Oliver White',
-      email: 'white.oliver456@example.com',
-      role: 'Tester'
-    },
-    {
-      id: 3,
-      name: 'Emily Walker',
-      email: 'walker.emily789@example.com',
-      role: 'Product Owner'
-    },
-    {
-      id: 4,
-      name: 'Daniel Baker',
-      email: 'd.baker@example.com',
-      role: 'Developer'
-    },
-    {
-      id: 5,
-      name: 'Sophia King',
-      email: 's.king@example.com',
-      role: 'Designer'
-    },
-    {
-      id: 6,
-      name: 'James Scott',
-      email: 'jscott567@example.com',
-      role: 'Scrum Master'
-    },
-    {
-      id: 7,
-      name: 'Amelia Green',
-      email: 'ameliagreen@example.com',
-      role: 'Developer'
-    },
-    {
-      id: 8,
-      name: 'Logan Adams',
-      email: 'logana@example.com',
-      role: 'Support'
-    },
-    {
-      id: 9,
-      name: 'Ava Hall',
-      email: 'avahall456@example.com',
-      role: 'QA Engineer'
-    },
-    {
-      id: 10,
-      name: 'William Turner',
-      email: 'will.turner@example.com',
-      role: 'Developer'
-    },
-    {
-      id: 11,
-      name: 'Harper Martinez',
-      email: 'hmartinez789@example.com',
-      role: 'Manager'
-    },
-    {
-      id: 12,
-      name: 'Jackson Young',
-      email: 'j.young@example.com',
-      role: 'Tester'
-    },
-    {
-      id: 13,
-      name: 'Lily Harris',
-      email: 'lily.harris123@example.com',
-      role: 'Product Owner'
-    },
-    {
-      id: 14,
-      name: 'Noah Thompson',
-      email: 'noaht@example.com',
-      role: 'Developer'
-    },
-    {
-      id: 15,
-      name: 'Ella Rodriguez',
-      email: 'ella.r@example.com',
-      role: 'Designer'
-    },
-    {
-      id: 16,
-      name: 'Mason Campbell',
-      email: 'masonc789@example.com',
-      role: 'Scrum Master'
-    },
-    {
-      id: 17,
-      name: 'Chloe Wright',
-      email: 'c.wright@example.com',
-      role: 'Developer'
-    },
-    {
-      id: 18,
-      name: 'Lucas Murphy',
-      email: 'lucasmurphy789@example.com',
-      role: 'Support'
-    },
-    {
-      id: 19,
-      name: 'Isabella Reed',
-      email: 'isabella.reed@example.com',
-      role: 'QA Engineer'
-    },
-    {
-      id: 20,
-      name: 'Benjamin Turner',
-      email: 'ben.t@example.com',
-      role: 'Developer'
-    },
-    {
-      id: 21,
-      name: 'Zoe Baker',
-      email: 'zbaker123@example.com',
-      role: 'Manager'
-    },
-    {
-      id: 22,
-      name: 'Alexander Hall',
-      email: 'alexander.hall456@example.com',
-      role: 'Tester'
-    },
-    {
-      id: 23,
-      name: 'Mia King',
-      email: 'miak456@example.com',
-      role: 'Product Owner'
-    },
-    {
-      id: 24,
-      name: 'Ethan Wright',
-      email: 'ethan.wright@example.com',
-      role: 'Developer'
-    },
-    {
-      id: 25,
-      name: 'Charlotte Adams',
-      email: 'c.adams@example.com',
-      role: 'Designer'
-    },
-    {
-      id: 26,
-      name: 'Gabriel Clark',
-      email: 'gabriel.clark@example.com',
-      role: 'Scrum Master'
-    },
-    {
-      id: 27,
-      name: 'Avery Green',
-      email: 'avery.g@example.com',
-      role: 'Developer'
-    },
-    {
-      id: 28,
-      name: 'Madison Martin',
-      email: 'madison.m@example.com',
-      role: 'Support'
-    },
-    {
-      id: 29,
-      name: 'Elijah Rodriguez',
-      email: 'elijahr@example.com',
-      role: 'QA Engineer'
-    },
-    {
-      id: 30,
-      name: 'Grace Parker',
-      email: 'grace.parker@example.com',
-      role: 'Developer'
-    },
-    {
-      id: 31,
-      name: 'Aiden Allen',
-      email: 'aidenallen@example.com',
-      role: 'Manager'
-    },
-    {
-      id: 32,
-      name: 'Scarlett Scott',
-      email: 'scarlett.s@example.com',
-      role: 'Tester'
-    },
-    {
-      id: 33,
-      name: 'Lucas Young',
-      email: 'l.young456@example.com',
-      role: 'Product Owner'
-    },
-    {
-      id: 34,
-      name: 'Riley Harris',
-      email: 'riley.harris123@example.com',
-      role: 'Developer'
-    },
-    {
-      id: 35,
-      name: 'Natalie Turner',
-      email: 'n.turner@example.com',
-      role: 'Designer'
-    },
-    {
-      id: 36,
-      name: 'Liam Campbell',
-      email: 'liam.c@example.com',
-      role: 'Scrum Master'
-    },
-    {
-      id: 37,
-      name: 'Aria Wright',
-      email: 'ariawright@example.com',
-      role: 'Developer'
-    },
-    {
-      id: 38,
-      name: 'Luke Murphy',
-      email: 'lukemurphy456@example.com',
-      role: 'Support'
-    },
-    {
-      id: 39,
-      name: 'Ariana Reed',
-      email: 'ariana.reed789@example.com',
-      role: 'QA Engineer'
-    },
-    {
-      id: 40,
-      name: 'Jayden Baker',
-      email: 'jbaker@example.com',
-      role: 'Developer'
-    },
-    {
-      id: 41,
-      name: 'Luna Hall',
-      email: 'lunahall@example.com',
-      role: 'Manager'
-    },
-    {
-      id: 42,
-      name: 'Mateo Adams',
-      email: 'mateoa@example.com',
-      role: 'Tester'
-    },
-    {
-      id: 43,
-      name: 'Hannah King',
-      email: 'h.king123@example.com',
-      role: 'Product Owner'
-    },
-    {
-      id: 44,
-      name: 'Carter Wright',
-      email: 'carter.wright@example.com',
-      role: 'Developer'
-    },
-    {
-      id: 45,
-      name: 'Aubrey Clark',
-      email: 'aubreyc456@example.com',
-      role: 'Designer'
-    },
-    {
-      id: 46,
-      name: 'Henry Scott',
-      email: 'henryscott@example.com',
-      role: 'Scrum Master'
-    },
-    {
-      id: 47,
-      name: 'Eva Green',
-      email: 'evagreen456@example.com',
-      role: 'Developer'
-    },
-    {
-      id: 48,
-      name: 'Leo Martin',
-      email: 'leo.martin@example.com',
-      role: 'Support'
-    },
-    {
-      id: 49,
-      name: 'Mila Rodriguez',
-      email: 'mila.r@example.com',
-      role: 'QA Engineer'
-    },
-    {
-      id: 50,
-      name: 'Hudson Parker',
-      email: 'hudson.parker@example.com',
-      role: 'Developer'
-    },
-  ];
+  @Input() data: any[] = [];
 
   sortBy: {
     order: 'asc' | 'desc' | undefined
@@ -408,9 +109,10 @@ export class TableComponent {
     }
 
   loading: boolean = true;
+  pluralModelText: string = '';
 
   constructor(
-    private importService: ImportService
+    private importService: ImportService,
   ) { }
 
   get dataChanged() {
@@ -583,7 +285,7 @@ export class TableComponent {
     if (this.config.serverSide) {
       this.loading = true;
       let response = await this.queryData();
-      this.processedData = response ? response.data.users : [];
+      this.processedData = response ? response.data[pluralize.plural(this.config.model)] : [];
       this.serverPagination(response);
       this.dataChanged = false;
       this.loading = false;
@@ -597,6 +299,7 @@ export class TableComponent {
     data = this.clientPagination(data);
     this.processedData = data;
     this.dataChanged = false;
+    this.loading = false;
   }
 
   @ViewChild('fileInput') fileInput: any;
@@ -648,5 +351,6 @@ export class TableComponent {
 
   ngOnInit() {
     this.processData();
+    this.pluralModelText = pluralize.plural(this.config.model);
   }
 }

@@ -1,104 +1,98 @@
-<app-primary-layout>
-    <div class="w-full p-10">
-        <div class="my-3">
-            <span class="mb-3 flex items-center text-sm font-medium text-slate-700/50">
-                <mat-icon>navigate_next</mat-icon>
-                <a [routerLink]="'/users'" class="hover:text-blue-700 duration-150 transition"> Users</a>
-                <mat-icon>navigate_next</mat-icon>
-                <p>Create</p>
-            </span>
+<div class="my-3">
+    <span class="mb-3 flex items-center text-sm font-medium text-slate-700/50">
+        <mat-icon>navigate_next</mat-icon>
+        <a [routerLink]="'/users'" class="hover:text-blue-700 duration-150 transition"> Users</a>
+        <mat-icon>navigate_next</mat-icon>
+        <p>Create</p>
+    </span>
 
-            <div class="my-5">
-                <h3 class="my-2 text-2xl font-bold whitespace-nowrap">Create User</h3>
-                <p>Input user details below to create a new account. Fill in required fields and set permissions as
-                    needed
-                </p>
-            </div>
-        </div>
-
-        <div class="mb-3 flex gap-3 items-center">
-            <p class="text-nowrap opacity-50">General Information</p>
-            <hr class="w-full">
-        </div>
-
-        <div class="mb-5">
-            <mat-form-field appearance="outline" class="w-full">
-                <mat-label>Name</mat-label>
-                <input name="name" required matInput [(ngModel)]="data.name" placeholder="Type the username">
-                <mat-hint>{{'ex: john doe, will be displayed accross the application'}}</mat-hint>
-            </mat-form-field>
-        </div>
-
-        <div class="mb-3 flex gap-3 items-center">
-            <p class="text-nowrap opacity-50">Authentication</p>
-            <hr class="w-full">
-        </div>
-
-        <div class="mb-3">
-            <mat-form-field appearance="outline" class="w-full">
-                <mat-label>Email</mat-label>
-                <input name="email" required type="email" [(ngModel)]="data.email" matInput
-                    placeholder="Type user email">
-                <mat-icon matSuffix class="scale-90">email</mat-icon>
-                <mat-hint>{{'ex: john@email.com'}}</mat-hint>
-            </mat-form-field>
-        </div>
-
-        <div class="mb-3">
-            <mat-form-field appearance="outline" class="w-full">
-                <mat-label>Password</mat-label>
-                <input name="password" required [type]="hide ? 'password' : 'text'" matInput [(ngModel)]="data.password"
-                    placeholder="Password">
-                <span class="pr-4" matSuffix (click)="setPasswordVisibility($event)" [attr.aria-label]="'Hide password'"
-                    [attr.aria-pressed]="hide">
-                    <mat-icon class="text-text-secondary hover:text-text-primary scale-90">{{hide ?
-                        'visibility_off' :
-                        'visibility'}}</mat-icon>
-                </span>
-            </mat-form-field>
-        </div>
-
-        <div class="mb-3">
-            <mat-form-field appearance="outline" class="w-full">
-                <mat-label>Confirm Password</mat-label>
-                <input name="confirm-password" required [type]="hide ? 'password' : 'text'" matInput
-                    [(ngModel)]="data.confirmPassword" placeholder="Password">
-                <span class="pr-4" matSuffix (click)="setPasswordVisibility($event)" [attr.aria-label]="'Hide password'"
-                    [attr.aria-pressed]="hide">
-                    <mat-icon class="text-text-secondary hover:text-text-primary scale-90">{{hide ?
-                        'visibility_off'
-                        :
-                        'visibility'}}</mat-icon>
-                </span>
-            </mat-form-field>
-        </div>
-
-        <div *appPermissions="['read:roles']" class="mb-3 flex gap-3 items-center">
-            <p class="text-nowrap opacity-50">Permission</p>
-            <hr class="w-full">
-        </div>
-
-        <div *appPermissions="['read:roles']">
-            <mat-form-field appearance="outline" class="w-full">
-                <mat-label>Roles</mat-label>
-                <mat-select multiple [(ngModel)]="data.roles">
-                    @for (role of roles; track role) {
-                    <mat-option [value]="role.id" class="capitalize">{{role.name}}</mat-option>
-                    }
-                </mat-select>
-            </mat-form-field>
-        </div>
-
-        <div class="mb-3">
-            <app-alert *ngIf="show.alert" [config]="alertConfig">
-            </app-alert>
-        </div>
-
-        <div class="h-24" *appPermissions="['create:users']">
-            <app-button icon="add_circle_outline" (click)="save()">
-                <p>Add User</p>
-            </app-button>
-        </div>
+    <div class="my-5">
+        <h3 class="my-2 text-2xl font-bold whitespace-nowrap">Create User</h3>
+        <p>Input user details below to create a new account. Fill in required fields and set permissions as
+            needed
+        </p>
     </div>
+</div>
 
-</app-primary-layout>
+<div class="mb-3 flex gap-3 items-center">
+    <p class="text-nowrap opacity-50">General Information</p>
+    <hr class="w-full">
+</div>
+
+<div class="mb-5">
+    <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Name</mat-label>
+        <input name="name" required matInput [(ngModel)]="data.name" placeholder="Type the username">
+        <mat-hint>{{'ex: john doe, will be displayed accross the application'}}</mat-hint>
+    </mat-form-field>
+</div>
+
+<div class="mb-3 flex gap-3 items-center">
+    <p class="text-nowrap opacity-50">Authentication</p>
+    <hr class="w-full">
+</div>
+
+<div class="mb-3">
+    <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Email</mat-label>
+        <input name="email" required type="email" [(ngModel)]="data.email" matInput placeholder="Type user email">
+        <mat-icon matSuffix class="scale-90">email</mat-icon>
+        <mat-hint>{{'ex: john@email.com'}}</mat-hint>
+    </mat-form-field>
+</div>
+
+<div class="mb-3">
+    <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Password</mat-label>
+        <input name="password" required [type]="hide ? 'password' : 'text'" matInput [(ngModel)]="data.password"
+            placeholder="Password">
+        <span class="pr-4" matSuffix (click)="setPasswordVisibility($event)" [attr.aria-label]="'Hide password'"
+            [attr.aria-pressed]="hide">
+            <mat-icon class="text-text-secondary hover:text-text-primary scale-90">{{hide ?
+                'visibility_off' :
+                'visibility'}}</mat-icon>
+        </span>
+    </mat-form-field>
+</div>
+
+<div class="mb-3">
+    <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Confirm Password</mat-label>
+        <input name="confirm-password" required [type]="hide ? 'password' : 'text'" matInput
+            [(ngModel)]="data.confirmPassword" placeholder="Password">
+        <span class="pr-4" matSuffix (click)="setPasswordVisibility($event)" [attr.aria-label]="'Hide password'"
+            [attr.aria-pressed]="hide">
+            <mat-icon class="text-text-secondary hover:text-text-primary scale-90">{{hide ?
+                'visibility_off'
+                :
+                'visibility'}}</mat-icon>
+        </span>
+    </mat-form-field>
+</div>
+
+<div *appPermissions="['read:roles']" class="mb-3 flex gap-3 items-center">
+    <p class="text-nowrap opacity-50">Permission</p>
+    <hr class="w-full">
+</div>
+
+<div *appPermissions="['read:roles']">
+    <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Roles</mat-label>
+        <mat-select multiple [(ngModel)]="data.roles">
+            @for (role of roles; track role) {
+            <mat-option [value]="role.id" class="capitalize">{{role.name}}</mat-option>
+            }
+        </mat-select>
+    </mat-form-field>
+</div>
+
+<div class="mb-3">
+    <app-alert *ngIf="show.alert" [config]="alertConfig">
+    </app-alert>
+</div>
+
+<div class="h-24" *appPermissions="['create:users']">
+    <app-button icon="add_circle_outline" (click)="save()">
+        <p>Add User</p>
+    </app-button>
+</div>

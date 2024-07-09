@@ -7,7 +7,20 @@ import { RbacService } from '../services/rbac.service';
   standalone: true
 })
 export class PermissionsDirective {
-  @Input('appPermissions') permissions: string[] = [];
+  private permissions: string[] = [];
+  private elseTemplateRef: TemplateRef<any> | null = null;
+  private hasView = false;
+
+  @Input() set appPermissions(permissions: string[]) {
+    this.permissions = permissions;
+    this.checkPermission();
+  }
+
+  @Input() set appPermissionsElse(templateRef: TemplateRef<any> | null) {
+    this.elseTemplateRef = templateRef;
+    this.checkPermission();
+  }
+
   constructor(
     private templateRef: TemplateRef<any>,
     private viewContainer: ViewContainerRef,
@@ -21,10 +34,23 @@ export class PermissionsDirective {
 
   private checkPermission() {
     const user = this.authService.user; // Get the current user from your authentication service
-    if (this.rbacService.checkPermission(this.permissions, user)) {
-      this.viewContainer.createEmbeddedView(this.templateRef);
+    const hasPermission = this.rbacService.checkPermission(this.permissions, user);
+
+    if (hasPermission) {
+      if (!this.hasView) {
+        this.viewContainer.clear();
+        this.viewContainer.createEmbeddedView(this.templateRef);
+        this.hasView = true;
+      }
     } else {
-      this.viewContainer.clear();
+      if (this.elseTemplateRef && !this.hasView) {
+        this.viewContainer.clear();
+        this.viewContainer.createEmbeddedView(this.elseTemplateRef);
+        this.hasView = true;
+      } else if (!this.elseTemplateRef) {
+        this.viewContainer.clear();
+        this.hasView = false;
+      }
     }
   }
 }
