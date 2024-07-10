@@ -198,4 +198,47 @@ export class ProductService {
 
     return response;
   }
+
+  async delete(product: Product): Promise<Response> {
+    let response: Response = {
+      type: 'info',
+      message: '',
+      status: 200,
+      data: {}
+    }
+
+    try {
+      let res = await axiosInstance.delete('/products/' + product.id);
+      response.type = 'success';
+      response.status = res.status;
+      response.message = 'Successfully delete product data';
+    } catch (error: any) {
+      console.error(error)
+      error = error.toJSON();
+      response.status = error.status;
+      switch (error.status) {
+        case 404:
+          response.type = 'danger'
+          response.message = 'Product not found'
+          break;
+
+        case 403:
+          response.type = 'danger'
+          response.message = 'Access denied, Please contact the administrator for further assistance'
+          break;
+
+        case 400:
+          response.type = 'warning'
+          response.message = 'Please ensure your input format'
+          break;
+
+        default:
+          response.type = 'danger'
+          response.message = 'Sorry, something went wrong. Please try again later.'
+          break;
+      }
+    }
+
+    return response;
+  }
 }

@@ -169,3 +169,21 @@
     <p>Update Product</p>
   </app-button>
 </div>
+
+<div *appPermissions="['delete:products']" class="my-5 border rounded border-red-50">
+  <h3 class="p-3 mb-3 rounded font-medium text-lg bg-red-50 text-red-500">Delete Product</h3>
+  <div class="p-2 flex gap-3">
+    <div class="w-3/5">
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Name</mat-label>
+        <input name="productName" required matInput [(ngModel)]="deleteProductName" placeholder="Type the product name">
+        <mat-hint>Type the product name to delete</mat-hint>
+      </mat-form-field>
+    </div>
+    <div class="w-2/5">
+      <app-button class="mt-1" icon="delete" (click)="delete()" type="secondary">
+        <p>Delete Product</p>
+      </app-button>
+    </div>
+  </div>
+</div>

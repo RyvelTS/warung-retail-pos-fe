@@ -27,6 +27,7 @@ import { ProductService } from '../../services/product.service';
 })
 export class EditComponent {
   paramId: string;
+  deleteProductName: string = '';
   alertConfig: AlertConfig = {
     type: 'info',
     message: ''
@@ -58,17 +59,43 @@ export class EditComponent {
   }
 
   async get() {
+    if (!this.rbacService.checkPermission(['read:products'])) return;
     let product = await this.productService.find(this.paramId);
     if (!product) return;
     this.product = product;
   }
 
   async update() {
-    let update = await this.productService.update(this.product);
+    if (!this.rbacService.checkPermission(['update:products'])) return;
+
+    let response = await this.productService.update(this.product);
     this.setAlert(
-      update.message,
-      update.type
+      response.message,
+      response.type
     );
+  }
+
+  async delete() {
+    if (!this.rbacService.checkPermission(['delete:products'])) return;
+
+    if (this.deleteProductName !== this.product.name) {
+      this.setAlert(
+        'Please type the product name to confirm deletion',
+        'info'
+      );
+
+      return;
+    }
+
+    let response = await this.productService.delete(this.product);
+    this.setAlert(
+      response.message,
+      response.type
+    );
+
+    setTimeout(() => {
+      this.router.navigate(['/products/']);
+    }, 3000);
   }
 
   setAlert(message: string = '', type: 'success' | 'warning' | 'danger' | 'info' = 'info') {
