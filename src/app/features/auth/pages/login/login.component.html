@@ -1,58 +1,52 @@
-<div class="min-h-screen grid md:grid-cols-2 content-center">
-    <div>
-    </div>
-
-
-    <form action="">
-        <div class="p-8 rounded-l-lg min-h-[75vh] flex flex-col justify-between shadow-[-16px_0px_32px_8px_#edf2f7]">
-            <div>
-                <div class="mb-8">
-                    <h1 class="text-3xl font-bold mb-3">Welcome Back!</h1>
-                    <p class="opacity-80">Please sign-in into your account to gain access to Warung Pos App</p>
-                </div>
-
-                <div>
-                    <div class="mb-3">
-                        <mat-form-field appearance="outline" class="w-full">
-                            <mat-label>Email</mat-label>
-                            <input name="email" required type="email" matInput [(ngModel)]="data.email"
-                                placeholder="Type your email">
-                            <mat-icon matSuffix class="scale-90">email</mat-icon>
-                            <mat-hint>{{'e.g : example@domain.com'}}</mat-hint>
-                        </mat-form-field>
-                    </div>
-
-                    <div class="mb-3">
-                        <mat-form-field appearance="outline" class="w-full">
-                            <mat-label>Password</mat-label>
-                            <input name="password" required [type]="hide ? 'password' : 'text'" matInput
-                                [(ngModel)]="data.password" placeholder="Password">
-                            <span class="pr-4" matSuffix (click)="setPasswordVisibility($event)"
-                                [attr.aria-label]="'Hide password'" [attr.aria-pressed]="show.password">
-                                <mat-icon class="text-text-secondary hover:text-text-primary scale-90">
-                                    {{show.password ? 'visibility_off' : 'visibility'}}
-                                </mat-icon>
-                            </span>
-                        </mat-form-field>
-                    </div>
-
-                    <app-alert *ngIf="show.alert" [config]="alertConfig">
-                    </app-alert>
-                </div>
+<form action="">
+    <div class="p-8 rounded-l-lg min-h-[75vh] flex flex-col justify-between shadow-[-16px_0px_32px_8px_#edf2f7]">
+        <div>
+            <div class="mb-8">
+                <h1 class="text-3xl font-bold mb-3">Welcome Back!</h1>
+                <p class="opacity-80">Please sign-in into your account to gain access to Warung Pos App</p>
             </div>
 
             <div>
-                <p class="mb-3">
-                    <app-button (click)="login($event)">
-                        <p>Login</p>
-                    </app-button>
-                </p>
-                <p class="text-center">
-                    <a [routerLink]="['/register']"
-                        class="text-slate-400 hover:text-slate-800 duration-300 transition font-medium cursor-pointer">Don't
-                        have an account? Please sign up here</a>
-                </p>
+                <div class="mb-3">
+                    <mat-form-field appearance="outline" class="w-full">
+                        <mat-label>Email</mat-label>
+                        <input name="email" required type="email" matInput [(ngModel)]="data.email"
+                            placeholder="Type your email">
+                        <mat-icon matSuffix class="scale-90">email</mat-icon>
+                        <mat-hint>{{'e.g : example@domain.com'}}</mat-hint>
+                    </mat-form-field>
+                </div>
+
+                <div class="mb-3">
+                    <mat-form-field appearance="outline" class="w-full">
+                        <mat-label>Password</mat-label>
+                        <input name="password" required [type]="hide ? 'password' : 'text'" matInput
+                            [(ngModel)]="data.password" placeholder="Password">
+                        <span class="pr-4" matSuffix (click)="setPasswordVisibility($event)"
+                            [attr.aria-label]="'Hide password'" [attr.aria-pressed]="show.password">
+                            <mat-icon class="text-text-secondary hover:text-text-primary scale-90">
+                                {{show.password ? 'visibility_off' : 'visibility'}}
+                            </mat-icon>
+                        </span>
+                    </mat-form-field>
+                </div>
+
+                <app-alert *ngIf="show.alert" [config]="alertConfig">
+                </app-alert>
             </div>
         </div>
-    </form>
-</div>
+
+        <div>
+            <p class="mb-3">
+                <app-button (click)="login($event)">
+                    <p>Login</p>
+                </app-button>
+            </p>
+            <p class="text-center">
+                <a [routerLink]="['/register']"
+                    class="text-slate-400 hover:text-slate-800 duration-300 transition font-medium cursor-pointer">Don't
+                    have an account? Please sign up here</a>
+            </p>
+        </div>
+    </div>
+</form>
